@@ -139,45 +139,24 @@
       border-color:#c8d4df;
     }
 
-    .stats-grid{
-      display:grid;
-      gap:12px;
-      grid-template-columns:repeat(4,minmax(0,1fr));
+    .search-row{
+      display:flex;
+      justify-content:flex-end;
       padding:0 20px 20px;
     }
 
-    .mini-card{
+    .search-box{
+      width:min(420px,100%);
       border:1px solid var(--line);
       border-radius:12px;
-      padding:16px;
-      min-height:86px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
       background:#fff;
-    }
-
-    .mini-card span{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:#7b8794;
-      font-weight:700;
-    }
-
-    .mini-card strong{
-      margin-top:8px;
-      color:var(--primary);
-      font-size:30px;
-    }
-
-    .search-wrap{
+      padding:12px 14px;
       display:flex;
       align-items:center;
       gap:10px;
     }
 
-    .search-wrap input{
+    .search-box input{
       width:100%;
       border:0;
       outline:none;
@@ -250,38 +229,15 @@
       box-shadow:0 1px 2px rgba(0,0,0,.05);
     }
 
-    .legend{
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
-      padding:20px 20px 0;
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    .legend-item{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-    }
-
-    .pill{
-      width:32px;
-      height:12px;
-      border-radius:999px;
-      display:inline-block;
-      background:var(--primary);
-    }
-
     .scroll-x{overflow-x:auto;padding:20px}
-    .gantt-table{min-width:1350px}
+    .table-wrap{min-width:1500px}
 
-    .gantt-header,.gantt-row{
+    .header-row,.data-row{
       display:grid;
-      grid-template-columns:220px 420px 140px 1fr;
+      grid-template-columns:220px 420px 140px repeat(12,70px);
     }
 
-    .gantt-header{
+    .header-row{
       background:#f8fafc;
       border:1px solid var(--line);
       border-radius:12px;
@@ -291,28 +247,20 @@
       color:#52606d;
     }
 
-    .gantt-header>div{
-      padding:14px 16px;
+    .header-row > div{
+      padding:14px 12px;
       border-right:1px solid var(--line);
-    }
-
-    .gantt-header>div:last-child{border-right:0}
-
-    .col-months{min-width:420px}
-
-    .gantt-header .col-months{
-      display:grid;
-      grid-template-columns:repeat(12,minmax(0,1fr));
-      padding:0;
-    }
-
-    .month-head{
-      padding:14px 0;
       text-align:center;
-      border-right:1px solid var(--line);
     }
 
-    .month-head:last-child{border-right:0}
+    .header-row > div:nth-child(1),
+    .header-row > div:nth-child(2),
+    .header-row > div:nth-child(3){
+      text-align:left;
+      padding-left:16px;
+    }
+
+    .header-row > div:last-child{border-right:0}
 
     .section-block{margin-top:18px}
 
@@ -334,26 +282,26 @@
       background:#fff;
     }
 
-    .gantt-row{border-bottom:1px solid var(--line-soft)}
-    .gantt-row:last-child{border-bottom:0}
+    .data-row{border-bottom:1px solid var(--line-soft)}
+    .data-row:last-child{border-bottom:0}
 
     .cell{
-      padding:14px 16px;
+      padding:14px 12px;
       border-right:1px solid var(--line-soft);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .cell.left{
+      justify-content:flex-start;
+      align-items:flex-start;
+      padding:14px 16px;
     }
 
     .cell:last-child{border-right:0}
 
-    .center{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#486170;
-      font-weight:600;
-    }
-
     .col-activity textarea,
-    .list-main textarea,
     .field textarea{
       width:100%;
       min-height:84px;
@@ -365,7 +313,7 @@
       outline:none;
     }
 
-    .period-input{
+    .small-input{
       width:100%;
       height:42px;
       border:1px solid #d6dee5;
@@ -375,6 +323,18 @@
       text-align:center;
       font-weight:600;
       color:#486170;
+      outline:none;
+    }
+
+    .month-input{
+      width:54px;
+      height:40px;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      text-align:center;
+      font-weight:600;
+      color:#334155;
       outline:none;
     }
 
@@ -391,29 +351,6 @@
     .chip-blue{background:#eaf3f9;color:#003f72;border-color:#c6dceb}
     .chip-teal{background:#ecfeff;color:#155e75;border-color:#a5f3fc}
     .chip-slate{background:#f1f5f9;color:#334155;border-color:#cbd5e1}
-
-    .months-grid{
-      display:grid;
-      grid-template-columns:repeat(12,minmax(0,1fr));
-      gap:8px;
-    }
-
-    .month-btn{
-      min-width:40px;
-      height:34px;
-      border-radius:10px;
-      border:1px solid #cbd5e1;
-      background:#fff;
-      color:#334155;
-      cursor:pointer;
-      font-weight:600;
-    }
-
-    .month-btn.active{
-      background:var(--primary);
-      color:#fff;
-      border-color:var(--primary);
-    }
 
     .list-grid{display:grid;gap:16px}
     .section-header{padding-bottom:16px;border-bottom:1px solid #eef2f6}
@@ -435,10 +372,10 @@
       gap:10px;
     }
 
-    .month-buttons{
-      display:flex;
+    .month-edit-grid{
+      display:grid;
+      grid-template-columns:repeat(6,minmax(0,1fr));
       gap:8px;
-      flex-wrap:wrap;
     }
 
     .icon-btn{
@@ -468,7 +405,7 @@
     .modal-backdrop.show{display:flex}
 
     .modal{
-      width:min(820px,100%);
+      width:min(900px,100%);
       background:#fff;
       border-radius:16px;
       border:1px solid var(--line);
@@ -523,18 +460,18 @@
     .hidden{display:none}
 
     @media (max-width:1024px){
-      .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .topbar{padding:18px 20px}
       .container{padding:20px}
       .topbar-side{display:none}
     }
 
     @media (max-width:720px){
-      .stats-grid,.modal-grid{grid-template-columns:1fr}
+      .modal-grid{grid-template-columns:1fr}
       .topbar h1{font-size:26px}
       .between{flex-direction:column;align-items:stretch}
       .actions{width:100%}
       .btn{justify-content:center;width:100%}
+      .search-row{padding:0 20px 20px}
     }
   </style>
 </head>
@@ -549,7 +486,7 @@
     </div>
     <div class="topbar-side">
       <div>Cronograma editable</div>
-      <small>Vista matricial por meses</small>
+      <small>Edición manual por meses</small>
     </div>
   </header>
 
@@ -558,32 +495,19 @@
       <div class="card-header between">
         <div>
           <h2>Panel de control</h2>
-          <p>Edita actividades, periodo, activa meses, agrega filas y exporta el cronograma en Excel.</p>
+          <p>Edita actividades y meses manualmente. Para guardar se pedirá confirmación y clave.</p>
         </div>
         <div class="actions">
           <button class="btn btn-outline" id="exportBtn">Exportar en Excel</button>
+          <button class="btn btn-primary" id="saveBtn">Guardar cambios</button>
           <button class="btn btn-primary" id="addBtn">Agregar actividad</button>
         </div>
       </div>
 
-      <div class="stats-grid">
-        <div class="mini-card">
-          <span>Total de actividades</span>
-          <strong id="statTotal">0</strong>
-        </div>
-        <div class="mini-card">
-          <span>Con meses asignados</span>
-          <strong id="statActive">0</strong>
-        </div>
-        <div class="mini-card">
-          <span>Hitos marcados</span>
-          <strong id="statMarks">0</strong>
-        </div>
-        <div class="mini-card">
-          <div class="search-wrap">
-            <span>🔎</span>
-            <input id="searchInput" placeholder="Buscar actividad o categoría">
-          </div>
+      <div class="search-row">
+        <div class="search-box">
+          <span>🔎</span>
+          <input id="searchInput" placeholder="Buscar actividad o categoría">
         </div>
       </div>
     </section>
@@ -605,21 +529,26 @@
     </section>
 
     <section class="card" id="cronogramaView">
-      <div class="legend">
-        <div class="legend-item">
-          <span class="pill"></span> Meses activos
-        </div>
-      </div>
-
       <div class="scroll-x">
-        <div class="gantt-table">
-          <div class="gantt-header">
+        <div class="table-wrap">
+          <div class="header-row">
             <div>Componente</div>
             <div>Actividad</div>
             <div>Periodo</div>
-            <div class="col-months" id="headerMonths"></div>
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+            <div>11</div>
+            <div>12</div>
           </div>
-          <div id="ganttSections"></div>
+          <div id="tableSections"></div>
         </div>
       </div>
     </section>
@@ -656,8 +585,8 @@
       </div>
 
       <div class="field">
-        <label>Meses</label>
-        <div class="month-buttons" id="draftMonths"></div>
+        <label>Meses (escribe 1 o vacío)</label>
+        <div class="month-edit-grid" id="draftMonths"></div>
       </div>
 
       <div class="modal-actions">
@@ -667,144 +596,42 @@
   </div>
 
   <script>
-    const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+    const PASSWORD = "RUTA2026";
 
     const INITIAL_DATA = [
       {
         id: "gobernanza",
         name: "Gobernanza",
         items: [
-          {
-            id: "g-1",
-            subcategory: "Convenio / Tratado Marco",
-            title: "Contratar consultor abogado (Alan Thomson) para acompañamiento del BID en la estructuración técnica de la gobernanza",
-            period: "2",
-            months: [2]
-          },
-          {
-            id: "g-2",
-            subcategory: "Convenio / Tratado Marco",
-            title: "Análisis sobre si corresponde convenio o tratado marco y modelo de gobernanza para proyectos piloto",
-            period: "3",
-            months: [3]
-          },
-          {
-            id: "g-3",
-            subcategory: "Convenio / Tratado Marco",
-            title: "Preparación y socialización del borrador de convenio/tratado con comisiones y/o gobernanza para pilotos",
-            period: "4–5",
-            months: [4,5]
-          },
-          {
-            id: "g-4",
-            subcategory: "Convenio / Tratado Marco",
-            title: "Firma del borrador de convenio/tratado marco en consejo intersectorial de ministros",
-            period: "6",
-            months: [6]
-          },
-          {
-            id: "g-5",
-            subcategory: "Convenio / Tratado Marco",
-            title: "Instrumento legal borrador para la gobernanza de los pilotos (a nivel de ministros de los 2 países participantes)",
-            period: "6",
-            months: [6]
-          },
-          {
-            id: "g-6",
-            subcategory: "Unidad Ejecutora Inicial",
-            title: "Contratar 2 consultores (coordinador y apoyo técnico) dentro de SIECA temporalmente",
-            period: "7–12",
-            months: [7,8,9,10,11,12]
-          },
-          {
-            id: "g-7",
-            subcategory: "Entrada en funcionamiento de instituciones regionales nuevas",
-            title: "Diseño detallado del esquema administrativo, operativo, financiero y funcional conforme al CM y estudio técnico",
-            period: "7–12",
-            months: [7,8,9,10,11,12]
-          },
-          {
-            id: "g-8",
-            subcategory: "Entrada en funcionamiento de instituciones regionales nuevas",
-            title: "Inicio en funcionamiento",
-            period: "",
-            months: []
-          }
+          { id: "g-1", subcategory: "Convenio / Tratado Marco", title: "Contratar consultor abogado (Alan Thomson) para acompañamiento del BID en la estructuración técnica de la gobernanza", period: "2", months: [2] },
+          { id: "g-2", subcategory: "Convenio / Tratado Marco", title: "Análisis sobre si corresponde convenio o tratado marco y modelo de gobernanza para proyectos piloto", period: "3", months: [3] },
+          { id: "g-3", subcategory: "Convenio / Tratado Marco", title: "Preparación y socialización del borrador de convenio/tratado con comisiones y/o gobernanza para pilotos", period: "4–5", months: [4,5] },
+          { id: "g-4", subcategory: "Convenio / Tratado Marco", title: "Firma del borrador de convenio/tratado marco en consejo intersectorial de ministros", period: "6", months: [6] },
+          { id: "g-5", subcategory: "Convenio / Tratado Marco", title: "Instrumento legal borrador para la gobernanza de los pilotos (a nivel de ministros de los 2 países participantes)", period: "6", months: [6] },
+          { id: "g-6", subcategory: "Unidad Ejecutora Inicial", title: "Contratar 2 consultores (coordinador y apoyo técnico) dentro de SIECA temporalmente", period: "7–12", months: [7,8,9,10,11,12] },
+          { id: "g-7", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Diseño detallado del esquema administrativo, operativo, financiero y funcional conforme al CM y estudio técnico", period: "7–12", months: [7,8,9,10,11,12] },
+          { id: "g-8", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Inicio en funcionamiento", period: "", months: [] }
         ]
       },
       {
         id: "tecnicos",
         name: "Técnicos",
         items: [
-          {
-            id: "t-1",
-            subcategory: "Estudios de ingeniería",
-            title: "Preparación de TdR para el diseño de los proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass",
-            period: "1–2",
-            months: [1,2]
-          },
-          {
-            id: "t-2",
-            subcategory: "Estudios de ingeniería",
-            title: "Proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass",
-            period: "3–10",
-            months: [3,4,5,6,7,8,9,10]
-          },
-          {
-            id: "t-3",
-            subcategory: "Estudios de derivación de carga y viabilidad",
-            title: "Estudio de demanda, DAP y viabilidad de derivación de carga al CargoPass",
-            period: "2–9",
-            months: [2,3,4,5,6,7,8,9]
-          },
-          {
-            id: "t-4",
-            subcategory: "Análisis económica, financiera, riesgos y legal",
-            title: "Estudio de viabilidad financiera y económica final, análisis de riesgos, acorde a procesos y guías de programación en los países",
-            period: "9–11",
-            months: [9,10,11]
-          },
-          {
-            id: "t-5",
-            subcategory: "Estudios de tiempos de viaje",
-            title: "Estudios de tiempos de viaje de todo el corredor, incluyendo puestos de frontera",
-            period: "3–8",
-            months: [3,4,5,6,7,8]
-          },
-          {
-            id: "t-6",
-            subcategory: "Análisis del OEA para todo el corredor",
-            title: "Diagnóstico para el análisis de los programas nacionales del Operador Económico Autorizado (tipificación, alcance y acuerdos de reconocimiento mutuo)",
-            period: "2–10",
-            months: [2,3,4,5,6,7,8,9,10]
-          }
+          { id: "t-1", subcategory: "Estudios de ingeniería", title: "Preparación de TdR para el diseño de los proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "1–2", months: [1,2] },
+          { id: "t-2", subcategory: "Estudios de ingeniería", title: "Proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "3–10", months: [3,4,5,6,7,8,9,10] },
+          { id: "t-3", subcategory: "Estudios de derivación de carga y viabilidad", title: "Estudio de demanda, DAP y viabilidad de derivación de carga al CargoPass", period: "2–9", months: [2,3,4,5,6,7,8,9] },
+          { id: "t-4", subcategory: "Análisis económica, financiera, riesgos y legal", title: "Estudio de viabilidad financiera y económica final, análisis de riesgos, acorde a procesos y guías de programación en los países", period: "9–11", months: [9,10,11] },
+          { id: "t-5", subcategory: "Estudios de tiempos de viaje", title: "Estudios de tiempos de viaje de todo el corredor, incluyendo puestos de frontera", period: "3–8", months: [3,4,5,6,7,8] },
+          { id: "t-6", subcategory: "Análisis del OEA para todo el corredor", title: "Diagnóstico para el análisis de los programas nacionales del Operador Económico Autorizado (tipificación, alcance y acuerdos de reconocimiento mutuo)", period: "2–10", months: [2,3,4,5,6,7,8,9,10] }
         ]
       },
       {
         id: "fondeo",
         name: "Fondeo",
         items: [
-          {
-            id: "f-1",
-            subcategory: "Fondo 1 de preinversión",
-            title: "Para Unidad Ejecutora inicial y para estudios de preinversión (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)",
-            period: "3–11",
-            months: [3,4,5,6,7,8,9,10,11]
-          },
-          {
-            id: "f-2",
-            subcategory: "Fondo 2 de operación para la gobernanza",
-            title: "Para Unidad Ejecutora inicial y arranque del funcionamiento de la gobernanza (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)",
-            period: "",
-            months: []
-          },
-          {
-            id: "f-3",
-            subcategory: "Fondo 3 implementación",
-            title: "CCLIP del BID más un champion",
-            period: "",
-            months: []
-          }
+          { id: "f-1", subcategory: "Fondo 1 de preinversión", title: "Para Unidad Ejecutora inicial y para estudios de preinversión (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "3–11", months: [3,4,5,6,7,8,9,10,11] },
+          { id: "f-2", subcategory: "Fondo 2 de operación para la gobernanza", title: "Para Unidad Ejecutora inicial y arranque del funcionamiento de la gobernanza (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "", months: [] },
+          { id: "f-3", subcategory: "Fondo 3 implementación", title: "CCLIP del BID más un champion", period: "", months: [] }
         ]
       }
     ];
@@ -815,7 +642,7 @@
       fondeo: { color: "#5B6B7A", chipClass: "chip-slate" }
     };
 
-    let sections = JSON.parse(JSON.stringify(INITIAL_DATA));
+    let sections = loadData();
     let query = "";
     let view = "cronograma";
     let draft = {
@@ -823,17 +650,37 @@
       subcategory: "",
       title: "",
       period: "",
-      months: []
+      months: Array(12).fill("")
     };
+
+    function loadData() {
+      try {
+        const saved = localStorage.getItem("actividades_hitos_data");
+        return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(INITIAL_DATA));
+      } catch {
+        return JSON.parse(JSON.stringify(INITIAL_DATA));
+      }
+    }
 
     function uid() {
       return Math.random().toString(36).slice(2, 9);
     }
 
+    function monthsFromInputs(values) {
+      const out = [];
+      values.forEach((value, index) => {
+        if (String(value).trim() !== "") out.push(index + 1);
+      });
+      return out;
+    }
+
+    function inputsFromMonths(months) {
+      return Array.from({ length: 12 }, (_, i) => months.includes(i + 1) ? "1" : "");
+    }
+
     function filteredSections() {
       const q = query.trim().toLowerCase();
       if (!q) return sections;
-
       return sections
         .map(section => ({
           ...section,
@@ -847,44 +694,14 @@
         .filter(section => section.items.length > 0);
     }
 
-    function stats() {
-      const all = sections.flatMap(s => s.items);
-      return {
-        total: all.length,
-        active: all.filter(i => i.months.length > 0).length,
-        marks: all.reduce((a, i) => a + i.months.length, 0)
-      };
-    }
-
     function monthlyCounts() {
       const counts = Array.from({ length: 12 }, (_, i) => ({ mes: i + 1, total: 0 }));
-      sections.forEach(section =>
-        section.items.forEach(item =>
-          item.months.forEach(m => counts[m - 1].total++)
-        )
-      );
+      sections.forEach(section => {
+        section.items.forEach(item => {
+          item.months.forEach(m => counts[m - 1].total++);
+        });
+      });
       return counts;
-    }
-
-    function toggleMonth(sectionId, itemId, month) {
-      sections = sections.map(section =>
-        section.id !== sectionId
-          ? section
-          : {
-              ...section,
-              items: section.items.map(item =>
-                item.id !== itemId
-                  ? item
-                  : {
-                      ...item,
-                      months: item.months.includes(month)
-                        ? item.months.filter(m => m !== month)
-                        : [...item.months, month].sort((a, b) => a - b)
-                    }
-              )
-            }
-      );
-      render();
     }
 
     function updateItem(sectionId, itemId, patch) {
@@ -913,9 +730,23 @@
       render();
     }
 
+    function saveChanges() {
+      const ok = confirm("¿Quieres guardar los cambios?");
+      if (!ok) return;
+
+      const pwd = prompt("Ingresa la contraseña para guardar:");
+      if (pwd !== PASSWORD) {
+        alert("Contraseña incorrecta.");
+        return;
+      }
+
+      localStorage.setItem("actividades_hitos_data", JSON.stringify(sections));
+      alert("Cambios guardados.");
+    }
+
     function exportExcelHtml() {
       let html = '<table border="1"><tr><th>Sección</th><th>Subcategoría</th><th>Actividad</th><th>Periodo</th>';
-      MONTHS.forEach(m => html += `<th>Mes ${m}</th>`);
+      for (let i = 1; i <= 12; i++) html += `<th>Mes ${i}</th>`;
       html += '</tr>';
 
       sections.forEach(section => {
@@ -926,7 +757,9 @@
             <td>${escapeHtml(item.title)}</td>
             <td>${escapeHtml(item.period || "")}</td>
           `;
-          MONTHS.forEach(m => html += `<td>${item.months.includes(m) ? 1 : ''}</td>`);
+          for (let i = 1; i <= 12; i++) {
+            html += `<td>${item.months.includes(i) ? 1 : ''}</td>`;
+          }
           html += '</tr>';
         });
       });
@@ -965,26 +798,8 @@
       `).join('');
     }
 
-    function renderHeaderMonths() {
-      document.getElementById('headerMonths').innerHTML =
-        MONTHS.map(m => `<div class="month-head">${m}</div>`).join('');
-    }
-
-    function renderMonthsGrid(sectionId, item) {
-      return `
-        <div class="months-grid">
-          ${MONTHS.map(m => `
-            <button
-              class="month-btn ${item.months.includes(m) ? 'active' : ''}"
-              data-toggle="${sectionId}|${item.id}|${m}"
-            >${m}</button>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    function renderGantt() {
-      const wrap = document.getElementById('ganttSections');
+    function renderTable() {
+      const wrap = document.getElementById("tableSections");
 
       wrap.innerHTML = filteredSections().map(section => {
         const style = SECTION_STYLES[section.id];
@@ -992,38 +807,42 @@
         return `
           <div class="section-block">
             <div class="section-title" style="background:${style.color}">
-              ${section.name}
+              ${escapeHtml(section.name)}
             </div>
-
             <div class="section-body">
-              ${section.items.map(item => `
-                <div class="gantt-row">
-                  <div class="col-component cell">
-                    <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
-                  </div>
+              ${section.items.map(item => {
+                const monthInputs = inputsFromMonths(item.months);
+                return `
+                  <div class="data-row">
+                    <div class="cell left">
+                      <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
+                    </div>
 
-                  <div class="col-activity cell">
-                    <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
-                  </div>
+                    <div class="cell left col-activity">
+                      <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                    </div>
 
-                  <div class="col-period cell center">
-                    <input
-                      class="period-input"
-                      value="${escapeHtml(item.period || '')}"
-                      data-period="${section.id}|${item.id}"
-                      placeholder="Periodo"
-                    >
-                  </div>
+                    <div class="cell">
+                      <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="Periodo">
+                    </div>
 
-                  <div class="col-months cell">
-                    ${renderMonthsGrid(section.id, item)}
+                    ${monthInputs.map((value, idx) => `
+                      <div class="cell">
+                        <input
+                          class="month-input"
+                          data-month="${section.id}|${item.id}|${idx + 1}"
+                          value="${value}"
+                          placeholder=""
+                        >
+                      </div>
+                    `).join("")}
                   </div>
-                </div>
-              `).join('')}
+                `;
+              }).join("")}
             </div>
           </div>
         `;
-      }).join('');
+      }).join("");
     }
 
     function renderList() {
@@ -1035,47 +854,46 @@
         return `
           <div class="card">
             <div class="card-header section-header">
-              <h2>${section.name}</h2>
+              <h2>${escapeHtml(section.name)}</h2>
             </div>
 
             <div class="list-items">
-              ${section.items.map(item => `
-                <div class="list-item">
-                  <div class="list-main">
-                    <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
+              ${section.items.map(item => {
+                const monthInputs = inputsFromMonths(item.months);
+                return `
+                  <div class="list-item">
+                    <div class="list-main">
+                      <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
 
-                    <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                      <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
 
-                    <input
-                      class="period-input"
-                      value="${escapeHtml(item.period || '')}"
-                      data-period="${section.id}|${item.id}"
-                      placeholder="Periodo"
-                    >
+                      <input
+                        class="small-input"
+                        data-period="${section.id}|${item.id}"
+                        value="${escapeHtml(item.period || "")}"
+                        placeholder="Periodo"
+                      >
 
-                    <div class="month-buttons">
-                      ${MONTHS.map(m => `
-                        <button class="month-btn ${item.months.includes(m) ? 'active' : ''}" data-toggle="${section.id}|${item.id}|${m}">
-                          ${m}
-                        </button>
-                      `).join('')}
+                      <div class="month-edit-grid">
+                        ${monthInputs.map((value, idx) => `
+                          <input
+                            class="month-input"
+                            data-month="${section.id}|${item.id}|${idx + 1}"
+                            value="${value}"
+                            placeholder="${idx + 1}"
+                          >
+                        `).join("")}
+                      </div>
                     </div>
-                  </div>
 
-                  <button class="icon-btn" data-delete="${section.id}|${item.id}" title="Eliminar">🗑</button>
-                </div>
-              `).join('')}
+                    <button class="icon-btn" data-delete="${section.id}|${item.id}" title="Eliminar">🗑</button>
+                  </div>
+                `;
+              }).join('')}
             </div>
           </div>
         `;
       }).join('');
-    }
-
-    function renderStats() {
-      const s = stats();
-      document.getElementById('statTotal').textContent = s.total;
-      document.getElementById('statActive').textContent = s.active;
-      document.getElementById('statMarks').textContent = s.marks;
     }
 
     function renderTabs() {
@@ -1087,14 +905,6 @@
       document.getElementById('listaView').classList.toggle('hidden', view !== 'lista');
     }
 
-    function renderDraftMonths() {
-      document.getElementById('draftMonths').innerHTML = MONTHS.map(m => `
-        <button class="month-btn ${draft.months.includes(m) ? 'active' : ''}" data-draft-month="${m}">
-          ${m}
-        </button>
-      `).join('');
-    }
-
     function renderDraftSections() {
       document.getElementById('draftSection').innerHTML = sections.map(s => `
         <option value="${s.id}" ${s.id === draft.sectionId ? 'selected' : ''}>
@@ -1103,14 +913,13 @@
       `).join('');
     }
 
-    function bindEvents() {
-      document.querySelectorAll('[data-toggle]').forEach(el => {
-        el.onclick = () => {
-          const [sectionId, itemId, month] = el.dataset.toggle.split('|');
-          toggleMonth(sectionId, itemId, Number(month));
-        };
-      });
+    function renderDraftMonths() {
+      document.getElementById("draftMonths").innerHTML = Array.from({ length: 12 }, (_, i) => `
+        <input class="month-input" data-draft-month="${i}" value="${draft.months[i]}" placeholder="${i + 1}">
+      `).join("");
+    }
 
+    function bindEvents() {
       document.querySelectorAll('[data-delete]').forEach(el => {
         el.onclick = () => {
           const [sectionId, itemId] = el.dataset.delete.split('|');
@@ -1132,22 +941,31 @@
         };
       });
 
+      document.querySelectorAll('[data-month]').forEach(el => {
+        el.onchange = () => {
+          const [sectionId, itemId, month] = el.dataset.month.split('|');
+          const monthNumber = Number(month);
+
+          const section = sections.find(s => s.id === sectionId);
+          const item = section.items.find(i => i.id === itemId);
+          const inputs = inputsFromMonths(item.months);
+          inputs[monthNumber - 1] = el.value.trim();
+
+          updateItem(sectionId, itemId, { months: monthsFromInputs(inputs) });
+        };
+      });
+
       document.querySelectorAll('[data-draft-month]').forEach(el => {
-        el.onclick = () => {
-          const m = Number(el.dataset.draftMonth);
-          draft.months = draft.months.includes(m)
-            ? draft.months.filter(x => x !== m)
-            : [...draft.months, m].sort((a, b) => a - b);
-          renderDraftMonths();
+        el.onchange = () => {
+          const idx = Number(el.dataset.draftMonth);
+          draft.months[idx] = el.value.trim();
         };
       });
     }
 
     function render() {
-      renderStats();
       renderChart();
-      renderHeaderMonths();
-      renderGantt();
+      renderTable();
       renderList();
       renderTabs();
       renderDraftSections();
@@ -1161,6 +979,7 @@
     };
 
     document.getElementById('exportBtn').onclick = exportExcelHtml;
+    document.getElementById('saveBtn').onclick = saveChanges;
 
     document.getElementById('addBtn').onclick = () => {
       document.getElementById('modalBackdrop').classList.add('show');
@@ -1195,6 +1014,8 @@
     document.getElementById('saveDraft').onclick = () => {
       if (!draft.subcategory.trim() || !draft.title.trim()) return;
 
+      const months = monthsFromInputs(draft.months);
+
       sections = sections.map(section =>
         section.id !== draft.sectionId
           ? section
@@ -1207,7 +1028,7 @@
                   subcategory: draft.subcategory,
                   title: draft.title,
                   period: draft.period,
-                  months: [...draft.months]
+                  months
                 }
               ]
             }
@@ -1218,7 +1039,7 @@
         subcategory: "",
         title: "",
         period: "",
-        months: []
+        months: Array(12).fill("")
       };
 
       document.getElementById('draftSubcategory').value = '';
