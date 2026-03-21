@@ -15,6 +15,9 @@
       --primary:#003f72;
       --primary-2:#00345e;
       --shadow:0 6px 20px rgba(16,24,40,.06);
+      --subheader-bg:#dfe8ef;
+      --subheader-text:#314b5f;
+      --subheader-border:#c7d4df;
     }
 
     *{box-sizing:border-box}
@@ -312,6 +315,7 @@
       display:inline-flex;
       align-items:center;
       gap:8px;
+      flex-wrap:wrap;
       font-size:13px;
       color:#486170;
       font-weight:600;
@@ -344,20 +348,88 @@
       border-top:0;
     }
 
-    .subsection-title{
-      background:#f7fafc;
-      color:#24455e;
+    .subsection-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background:var(--subheader-bg);
+      color:var(--subheader-text);
       font-weight:700;
       font-size:14px;
       padding:12px 16px;
-      border-bottom:1px solid var(--line-soft);
+      border-bottom:1px solid var(--subheader-border);
+    }
+
+    .subsection-head-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .subsection-title{
+      font-weight:800;
+      letter-spacing:.01em;
+    }
+
+    .subsection-chevron{
+      border:0;
+      background:transparent;
+      color:var(--subheader-text);
+      font-size:15px;
+      line-height:1;
+      cursor:pointer;
+      padding:0;
+      width:18px;
+      text-align:center;
+    }
+
+    .subsection-body.collapsed{
+      display:none;
+    }
+
+    .duration-bar-wrap{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-width:180px;
+    }
+
+    .duration-bar-track{
+      width:140px;
+      height:10px;
+      border-radius:999px;
+      background:#e8eef3;
+      position:relative;
+      overflow:hidden;
+      border:1px solid #d7e1e9;
+    }
+
+    .duration-bar-fill{
+      position:absolute;
+      top:0;
+      height:100%;
+      border-radius:999px;
+      background:#6d879a;
+    }
+
+    .duration-bar-fill.main{
+      background:#3f627f;
+    }
+
+    .duration-bar-label{
+      font-size:12px;
+      font-weight:700;
+      color:#486170;
+      white-space:nowrap;
     }
 
     .data-row{
       border-bottom:1px solid var(--line-soft);
     }
 
-    .subsection-block .data-row:last-child{
+    .subsection-body .data-row:last-child{
       border-bottom:0;
     }
 
@@ -758,6 +830,7 @@
     let sections = loadData();
     let query = "";
     let collapsedSections = {};
+    let collapsedSubsections = {};
     let draft = {
       sectionId: "gobernanza",
       subcategory: "",
@@ -845,6 +918,13 @@
       return counts;
     }
 
+    function getRangeFromMonths(months) {
+      if (!months || !months.length) return null;
+      const min = Math.min(...months);
+      const max = Math.max(...months);
+      return { min, max };
+    }
+
     function getSectionDuration(section) {
       const allMonths = section.items.flatMap(item => item.months || []);
       if (!allMonths.length) return "Sin periodo";
@@ -864,6 +944,31 @@
         found.items.push(item);
       });
       return groups;
+    }
+
+    function renderDurationBar(months, isMain = false) {
+      const range = getRangeFromMonths(months);
+      if (!range) {
+        return `
+          <div class="duration-bar-wrap">
+            <div class="duration-bar-track"></div>
+            <span class="duration-bar-label">Sin periodo</span>
+          </div>
+        `;
+      }
+
+      const left = ((range.min - 1) / 12) * 100;
+      const width = ((range.max - range.min + 1) / 12) * 100;
+      const label = range.min === range.max ? `${range.min}` : `${range.min}-${range.max}`;
+
+      return `
+        <div class="duration-bar-wrap">
+          <div class="duration-bar-track">
+            <div class="duration-bar-fill ${isMain ? "main" : ""}" style="left:${left}%; width:${width}%"></div>
+          </div>
+          <span class="duration-bar-label">${label}</span>
+        </div>
+      `;
     }
 
     function updateItem(sectionId, itemId, patch) {
@@ -970,47 +1075,64 @@
                   <span>${escapeHtml(section.name)}</span>
                 </div>
                 <div class="section-meta">
-                  <span class="section-duration">Duración total: ${duration}</span>
+                  <span class="section-duration">Duración total</span>
+                  ${renderDurationBar(section.items.flatMap(i => i.months || []), true)}
                 </div>
               </div>
             </div>
 
             <div class="section-body ${isCollapsed ? 'collapsed' : ''}">
-              ${groups.map(group => `
-                <div class="subsection-block">
-                  <div class="subsection-title">${escapeHtml(group.name)}</div>
+              ${groups.map(group => {
+                const subsectionKey = `${section.id}__${group.name}`;
+                const subsectionCollapsed = !!collapsedSubsections[subsectionKey];
+                const groupMonths = group.items.flatMap(i => i.months || []);
 
-                  ${group.items.map(item => {
-                    const monthInputs = inputsFromMonths(item.months);
-
-                    return `
-                      <div class="data-row">
-                        <div class="cell left col-activity">
-                          <div class="activity-wrap">
-                            <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
-                          </div>
-                        </div>
-
-                        <div class="cell">
-                          <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="2-5 o 2">
-                        </div>
-
-                        ${monthInputs.map((value, idx) => `
-                          <div class="cell">
-                            <input
-                              class="month-input ${value ? 'active' : ''}"
-                              data-month="${section.id}|${item.id}|${idx + 1}"
-                              value=""
-                              placeholder=""
-                              readonly
-                            >
-                          </div>
-                        `).join("")}
+                return `
+                  <div class="subsection-block">
+                    <div class="subsection-head">
+                      <div class="subsection-head-left">
+                        <button class="subsection-chevron" data-toggle-subsection="${escapeHtml(subsectionKey)}">
+                          ${subsectionCollapsed ? '▸' : '▾'}
+                        </button>
+                        <span class="subsection-title">${escapeHtml(group.name)}</span>
+                        ${renderDurationBar(groupMonths)}
                       </div>
-                    `;
-                  }).join("")}
-                </div>
-              `).join("")}
+                    </div>
+
+                    <div class="subsection-body ${subsectionCollapsed ? 'collapsed' : ''}">
+                      ${group.items.map(item => {
+                        const monthInputs = inputsFromMonths(item.months);
+
+                        return `
+                          <div class="data-row">
+                            <div class="cell left col-activity">
+                              <div class="activity-wrap">
+                                <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                              </div>
+                            </div>
+
+                            <div class="cell">
+                              <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="2-5 o 2">
+                            </div>
+
+                            ${monthInputs.map((value, idx) => `
+                              <div class="cell">
+                                <input
+                                  class="month-input ${value ? 'active' : ''}"
+                                  data-month="${section.id}|${item.id}|${idx + 1}"
+                                  value=""
+                                  placeholder=""
+                                  readonly
+                                >
+                              </div>
+                            `).join("")}
+                          </div>
+                        `;
+                      }).join("")}
+                    </div>
+                  </div>
+                `;
+              }).join("")}
             </div>
           </div>
         `;
@@ -1087,6 +1209,14 @@
         el.onclick = () => {
           const id = el.dataset.toggleSection;
           collapsedSections[id] = !collapsedSections[id];
+          render();
+        };
+      });
+
+      document.querySelectorAll('[data-toggle-subsection]').forEach(el => {
+        el.onclick = () => {
+          const key = el.dataset.toggleSubsection;
+          collapsedSubsections[key] = !collapsedSubsections[key];
           render();
         };
       });
