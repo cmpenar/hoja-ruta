@@ -104,22 +104,44 @@
       padding:20px 20px 12px;
     }
 
-    .between{
-      justify-content:space-between;
-      gap:16px;
-      align-items:flex-start;
-    }
-
     .card-header h2{
       margin:0;
       color:var(--primary);
       font-size:20px;
     }
 
-    .card-header p{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:14px;
+    .toolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      padding:16px 20px;
+      flex-wrap:wrap;
+    }
+
+    .toolbar-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .toolbar-search{
+      width:min(420px,100%);
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .toolbar-search input{
+      width:100%;
+      border:0;
+      outline:none;
+      background:transparent;
+      color:var(--text);
     }
 
     .actions{
@@ -152,31 +174,6 @@
       background:#fff;
       color:var(--primary);
       border-color:#c8d4df;
-    }
-
-    .search-row{
-      display:flex;
-      justify-content:flex-end;
-      padding:0 20px 20px;
-    }
-
-    .search-box{
-      width:min(420px,100%);
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:#fff;
-      padding:12px 14px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .search-box input{
-      width:100%;
-      border:0;
-      outline:none;
-      background:transparent;
-      color:var(--text);
     }
 
     .chart-wrap{
@@ -649,22 +646,18 @@
         font-size:26px;
       }
 
-      .between{
+      .toolbar{
         flex-direction:column;
         align-items:stretch;
       }
 
-      .actions{
+      .toolbar-actions{
         width:100%;
       }
 
       .btn{
         justify-content:center;
         width:100%;
-      }
-
-      .search-row{
-        padding:0 20px 20px;
       }
     }
   </style>
@@ -686,20 +679,14 @@
 
   <main class="container">
     <section class="card">
-      <div class="card-header between">
-        <div>
-          <h2>Panel de control</h2>
-          <p>Edita el periodo manualmente. Si escribes 2-5, se activan automáticamente los meses 2, 3, 4 y 5.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-outline" id="exportBtn">Exportar en Excel</button>
-          <button class="btn btn-primary" id="saveBtn">Guardar cambios</button>
+      <div class="toolbar">
+        <div class="toolbar-actions">
+          <button class="btn btn-outline" id="exportBtn">Exportar</button>
+          <button class="btn btn-primary" id="saveBtn">Guardar</button>
           <button class="btn btn-primary" id="addBtn">Agregar actividad</button>
         </div>
-      </div>
 
-      <div class="search-row">
-        <div class="search-box">
+        <div class="toolbar-search">
           <span>🔎</span>
           <input id="searchInput" placeholder="Buscar actividad o categoría">
         </div>
