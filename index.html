@@ -18,6 +18,7 @@
     }
 
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
@@ -38,7 +39,14 @@
     }
 
     .topbar-inner{display:flex;align-items:center;gap:16px}
-    .brand-mark{width:6px;height:44px;border-radius:999px;background:var(--primary)}
+
+    .brand-mark{
+      width:6px;
+      height:44px;
+      border-radius:999px;
+      background:var(--primary);
+    }
+
     .eyebrow{
       margin:0 0 4px;
       font-size:12px;
@@ -164,7 +172,9 @@
       color:var(--text);
     }
 
-    .chart-wrap{padding:0 20px 20px}
+    .chart-wrap{
+      padding:0 20px 20px;
+    }
 
     .chart-grid{
       height:240px;
@@ -199,8 +209,16 @@
       border-radius:8px 8px 4px 4px;
     }
 
-    .bar-label{font-size:12px;color:var(--muted)}
-    .bar-value{font-size:12px;font-weight:700;color:var(--primary)}
+    .bar-label{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .bar-value{
+      font-size:12px;
+      font-weight:700;
+      color:var(--primary);
+    }
 
     .tabs{
       display:inline-flex;
@@ -229,10 +247,17 @@
       box-shadow:0 1px 2px rgba(0,0,0,.05);
     }
 
-    .scroll-x{overflow-x:auto;padding:20px}
-    .table-wrap{min-width:1500px}
+    .scroll-x{
+      overflow-x:auto;
+      padding:20px;
+    }
 
-    .header-row,.data-row{
+    .table-wrap{
+      min-width:1500px;
+    }
+
+    .header-row,
+    .data-row{
       display:grid;
       grid-template-columns:220px 420px 140px repeat(12,70px);
     }
@@ -260,9 +285,13 @@
       padding-left:16px;
     }
 
-    .header-row > div:last-child{border-right:0}
+    .header-row > div:last-child{
+      border-right:0;
+    }
 
-    .section-block{margin-top:18px}
+    .section-block{
+      margin-top:18px;
+    }
 
     .section-title{
       color:#fff;
@@ -282,8 +311,13 @@
       background:#fff;
     }
 
-    .data-row{border-bottom:1px solid var(--line-soft)}
-    .data-row:last-child{border-bottom:0}
+    .data-row{
+      border-bottom:1px solid var(--line-soft);
+    }
+
+    .data-row:last-child{
+      border-bottom:0;
+    }
 
     .cell{
       padding:14px 12px;
@@ -299,7 +333,9 @@
       padding:14px 16px;
     }
 
-    .cell:last-child{border-right:0}
+    .cell:last-child{
+      border-right:0;
+    }
 
     .col-activity textarea,
     .field textarea{
@@ -348,13 +384,39 @@
       line-height:1.3;
     }
 
-    .chip-blue{background:#eaf3f9;color:#003f72;border-color:#c6dceb}
-    .chip-teal{background:#ecfeff;color:#155e75;border-color:#a5f3fc}
-    .chip-slate{background:#f1f5f9;color:#334155;border-color:#cbd5e1}
+    .chip-blue{
+      background:#eaf3f9;
+      color:#003f72;
+      border-color:#c6dceb;
+    }
 
-    .list-grid{display:grid;gap:16px}
-    .section-header{padding-bottom:16px;border-bottom:1px solid #eef2f6}
-    .list-items{padding:0 20px 20px;display:grid;gap:14px}
+    .chip-teal{
+      background:#ecfeff;
+      color:#155e75;
+      border-color:#a5f3fc;
+    }
+
+    .chip-slate{
+      background:#f1f5f9;
+      color:#334155;
+      border-color:#cbd5e1;
+    }
+
+    .list-grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .section-header{
+      padding-bottom:16px;
+      border-bottom:1px solid #eef2f6;
+    }
+
+    .list-items{
+      padding:0 20px 20px;
+      display:grid;
+      gap:14px;
+    }
 
     .list-item{
       border:1px solid var(--line);
@@ -402,7 +464,9 @@
       z-index:50;
     }
 
-    .modal-backdrop.show{display:flex}
+    .modal-backdrop.show{
+      display:flex;
+    }
 
     .modal{
       width:min(900px,100%);
@@ -439,7 +503,9 @@
       color:#334155;
     }
 
-    .field{margin-top:14px}
+    .field{
+      margin-top:14px;
+    }
 
     input,select{
       width:100%;
@@ -457,21 +523,50 @@
       margin-top:18px;
     }
 
-    .hidden{display:none}
+    .hidden{
+      display:none;
+    }
 
     @media (max-width:1024px){
-      .topbar{padding:18px 20px}
-      .container{padding:20px}
-      .topbar-side{display:none}
+      .topbar{
+        padding:18px 20px;
+      }
+
+      .container{
+        padding:20px;
+      }
+
+      .topbar-side{
+        display:none;
+      }
     }
 
     @media (max-width:720px){
-      .modal-grid{grid-template-columns:1fr}
-      .topbar h1{font-size:26px}
-      .between{flex-direction:column;align-items:stretch}
-      .actions{width:100%}
-      .btn{justify-content:center;width:100%}
-      .search-row{padding:0 20px 20px}
+      .modal-grid{
+        grid-template-columns:1fr;
+      }
+
+      .topbar h1{
+        font-size:26px;
+      }
+
+      .between{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      .actions{
+        width:100%;
+      }
+
+      .btn{
+        justify-content:center;
+        width:100%;
+      }
+
+      .search-row{
+        padding:0 20px 20px;
+      }
     }
   </style>
 </head>
@@ -486,7 +581,7 @@
     </div>
     <div class="topbar-side">
       <div>Cronograma editable</div>
-      <small>Edición manual por meses</small>
+      <small>Periodo sincroniza meses</small>
     </div>
   </header>
 
@@ -495,7 +590,7 @@
       <div class="card-header between">
         <div>
           <h2>Panel de control</h2>
-          <p>Edita actividades y meses manualmente. Para guardar se pedirá confirmación y clave.</p>
+          <p>Edita el periodo manualmente. Si escribes 2-5, se activan automáticamente los meses 2, 3, 4 y 5.</p>
         </div>
         <div class="actions">
           <button class="btn btn-outline" id="exportBtn">Exportar en Excel</button>
@@ -581,11 +676,11 @@
 
       <div class="field">
         <label>Periodo</label>
-        <input id="draftPeriod" placeholder="Ej. 4–5 o Q1">
+        <input id="draftPeriod" placeholder="Ej. 2-5 o 2">
       </div>
 
       <div class="field">
-        <label>Meses (escribe 1 o vacío)</label>
+        <label>Meses (opcional, si no llenas periodo)</label>
         <div class="month-edit-grid" id="draftMonths"></div>
       </div>
 
@@ -605,11 +700,11 @@
         items: [
           { id: "g-1", subcategory: "Convenio / Tratado Marco", title: "Contratar consultor abogado (Alan Thomson) para acompañamiento del BID en la estructuración técnica de la gobernanza", period: "2", months: [2] },
           { id: "g-2", subcategory: "Convenio / Tratado Marco", title: "Análisis sobre si corresponde convenio o tratado marco y modelo de gobernanza para proyectos piloto", period: "3", months: [3] },
-          { id: "g-3", subcategory: "Convenio / Tratado Marco", title: "Preparación y socialización del borrador de convenio/tratado con comisiones y/o gobernanza para pilotos", period: "4–5", months: [4,5] },
+          { id: "g-3", subcategory: "Convenio / Tratado Marco", title: "Preparación y socialización del borrador de convenio/tratado con comisiones y/o gobernanza para pilotos", period: "4-5", months: [4,5] },
           { id: "g-4", subcategory: "Convenio / Tratado Marco", title: "Firma del borrador de convenio/tratado marco en consejo intersectorial de ministros", period: "6", months: [6] },
           { id: "g-5", subcategory: "Convenio / Tratado Marco", title: "Instrumento legal borrador para la gobernanza de los pilotos (a nivel de ministros de los 2 países participantes)", period: "6", months: [6] },
-          { id: "g-6", subcategory: "Unidad Ejecutora Inicial", title: "Contratar 2 consultores (coordinador y apoyo técnico) dentro de SIECA temporalmente", period: "7–12", months: [7,8,9,10,11,12] },
-          { id: "g-7", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Diseño detallado del esquema administrativo, operativo, financiero y funcional conforme al CM y estudio técnico", period: "7–12", months: [7,8,9,10,11,12] },
+          { id: "g-6", subcategory: "Unidad Ejecutora Inicial", title: "Contratar 2 consultores (coordinador y apoyo técnico) dentro de SIECA temporalmente", period: "7-12", months: [7,8,9,10,11,12] },
+          { id: "g-7", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Diseño detallado del esquema administrativo, operativo, financiero y funcional conforme al CM y estudio técnico", period: "7-12", months: [7,8,9,10,11,12] },
           { id: "g-8", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Inicio en funcionamiento", period: "", months: [] }
         ]
       },
@@ -617,19 +712,19 @@
         id: "tecnicos",
         name: "Técnicos",
         items: [
-          { id: "t-1", subcategory: "Estudios de ingeniería", title: "Preparación de TdR para el diseño de los proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "1–2", months: [1,2] },
-          { id: "t-2", subcategory: "Estudios de ingeniería", title: "Proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "3–10", months: [3,4,5,6,7,8,9,10] },
-          { id: "t-3", subcategory: "Estudios de derivación de carga y viabilidad", title: "Estudio de demanda, DAP y viabilidad de derivación de carga al CargoPass", period: "2–9", months: [2,3,4,5,6,7,8,9] },
-          { id: "t-4", subcategory: "Análisis económica, financiera, riesgos y legal", title: "Estudio de viabilidad financiera y económica final, análisis de riesgos, acorde a procesos y guías de programación en los países", period: "9–11", months: [9,10,11] },
-          { id: "t-5", subcategory: "Estudios de tiempos de viaje", title: "Estudios de tiempos de viaje de todo el corredor, incluyendo puestos de frontera", period: "3–8", months: [3,4,5,6,7,8] },
-          { id: "t-6", subcategory: "Análisis del OEA para todo el corredor", title: "Diagnóstico para el análisis de los programas nacionales del Operador Económico Autorizado (tipificación, alcance y acuerdos de reconocimiento mutuo)", period: "2–10", months: [2,3,4,5,6,7,8,9,10] }
+          { id: "t-1", subcategory: "Estudios de ingeniería", title: "Preparación de TdR para el diseño de los proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "1-2", months: [1,2] },
+          { id: "t-2", subcategory: "Estudios de ingeniería", title: "Proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "3-10", months: [3,4,5,6,7,8,9,10] },
+          { id: "t-3", subcategory: "Estudios de derivación de carga y viabilidad", title: "Estudio de demanda, DAP y viabilidad de derivación de carga al CargoPass", period: "2-9", months: [2,3,4,5,6,7,8,9] },
+          { id: "t-4", subcategory: "Análisis económica, financiera, riesgos y legal", title: "Estudio de viabilidad financiera y económica final, análisis de riesgos, acorde a procesos y guías de programación en los países", period: "9-11", months: [9,10,11] },
+          { id: "t-5", subcategory: "Estudios de tiempos de viaje", title: "Estudios de tiempos de viaje de todo el corredor, incluyendo puestos de frontera", period: "3-8", months: [3,4,5,6,7,8] },
+          { id: "t-6", subcategory: "Análisis del OEA para todo el corredor", title: "Diagnóstico para el análisis de los programas nacionales del Operador Económico Autorizado (tipificación, alcance y acuerdos de reconocimiento mutuo)", period: "2-10", months: [2,3,4,5,6,7,8,9,10] }
         ]
       },
       {
         id: "fondeo",
         name: "Fondeo",
         items: [
-          { id: "f-1", subcategory: "Fondo 1 de preinversión", title: "Para Unidad Ejecutora inicial y para estudios de preinversión (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "3–11", months: [3,4,5,6,7,8,9,10,11] },
+          { id: "f-1", subcategory: "Fondo 1 de preinversión", title: "Para Unidad Ejecutora inicial y para estudios de preinversión (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "3-11", months: [3,4,5,6,7,8,9,10,11] },
           { id: "f-2", subcategory: "Fondo 2 de operación para la gobernanza", title: "Para Unidad Ejecutora inicial y arranque del funcionamiento de la gobernanza (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "", months: [] },
           { id: "f-3", subcategory: "Fondo 3 implementación", title: "CCLIP del BID más un champion", period: "", months: [] }
         ]
@@ -678,9 +773,41 @@
       return Array.from({ length: 12 }, (_, i) => months.includes(i + 1) ? "1" : "");
     }
 
+    function parsePeriodToMonths(period) {
+      const value = String(period || "").trim();
+      if (!value) return [];
+
+      const normalized = value.replace(/–/g, "-").replace(/\s+/g, "");
+
+      if (/^\d+$/.test(normalized)) {
+        const n = Number(normalized);
+        if (n >= 1 && n <= 12) return [n];
+        return [];
+      }
+
+      const rangeMatch = normalized.match(/^(\d+)-(\d+)$/);
+      if (rangeMatch) {
+        const start = Number(rangeMatch[1]);
+        const end = Number(rangeMatch[2]);
+
+        if (
+          start >= 1 && start <= 12 &&
+          end >= 1 && end <= 12 &&
+          start <= end
+        ) {
+          const months = [];
+          for (let i = start; i <= end; i++) months.push(i);
+          return months;
+        }
+      }
+
+      return [];
+    }
+
     function filteredSections() {
       const q = query.trim().toLowerCase();
       if (!q) return sections;
+
       return sections
         .map(section => ({
           ...section,
@@ -823,7 +950,7 @@
                     </div>
 
                     <div class="cell">
-                      <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="Periodo">
+                      <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="2-5 o 2">
                     </div>
 
                     ${monthInputs.map((value, idx) => `
@@ -860,6 +987,7 @@
             <div class="list-items">
               ${section.items.map(item => {
                 const monthInputs = inputsFromMonths(item.months);
+
                 return `
                   <div class="list-item">
                     <div class="list-main">
@@ -871,7 +999,7 @@
                         class="small-input"
                         data-period="${section.id}|${item.id}"
                         value="${escapeHtml(item.period || "")}"
-                        placeholder="Periodo"
+                        placeholder="2-5 o 2"
                       >
 
                       <div class="month-edit-grid">
@@ -937,7 +1065,13 @@
       document.querySelectorAll('[data-period]').forEach(el => {
         el.onchange = () => {
           const [sectionId, itemId] = el.dataset.period.split('|');
-          updateItem(sectionId, itemId, { period: el.value });
+          const newPeriod = el.value.trim();
+          const parsedMonths = parsePeriodToMonths(newPeriod);
+
+          updateItem(sectionId, itemId, {
+            period: newPeriod,
+            months: parsedMonths
+          });
         };
       });
 
@@ -949,9 +1083,12 @@
           const section = sections.find(s => s.id === sectionId);
           const item = section.items.find(i => i.id === itemId);
           const inputs = inputsFromMonths(item.months);
+
           inputs[monthNumber - 1] = el.value.trim();
 
-          updateItem(sectionId, itemId, { months: monthsFromInputs(inputs) });
+          updateItem(sectionId, itemId, {
+            months: monthsFromInputs(inputs)
+          });
         };
       });
 
@@ -1014,7 +1151,9 @@
     document.getElementById('saveDraft').onclick = () => {
       if (!draft.subcategory.trim() || !draft.title.trim()) return;
 
-      const months = monthsFromInputs(draft.months);
+      const months = draft.period.trim()
+        ? parsePeriodToMonths(draft.period)
+        : monthsFromInputs(draft.months);
 
       sections = sections.map(section =>
         section.id !== draft.sectionId
