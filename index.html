@@ -1,464 +1,1154 @@
-<script>
-  const PASSWORD = "RUTA2026";
-  let hasUnsavedChanges = false;
-
-  const INITIAL_DATA = [
-    {
-      id: "gobernanza",
-      name: "Gobernanza",
-      items: [
-        { id: "g-1", subcategory: "Convenio / Tratado Marco", title: "Contratar consultor abogado (Alan Thomson) para acompañamiento del BID en la estructuración técnica de la gobernanza", period: "2", months: [2] },
-        { id: "g-2", subcategory: "Convenio / Tratado Marco", title: "Análisis sobre si corresponde convenio o tratado marco y modelo de gobernanza para proyectos piloto", period: "3", months: [3] },
-        { id: "g-3", subcategory: "Convenio / Tratado Marco", title: "Preparación y socialización del borrador de convenio/tratado con comisiones y/o gobernanza para pilotos", period: "4-5", months: [4,5] },
-        { id: "g-4", subcategory: "Convenio / Tratado Marco", title: "Firma del borrador de convenio/tratado marco en consejo intersectorial de ministros", period: "6", months: [6] },
-        { id: "g-5", subcategory: "Convenio / Tratado Marco", title: "Instrumento legal borrador para la gobernanza de los pilotos (a nivel de ministros de los 2 países participantes)", period: "6", months: [6] },
-        { id: "g-6", subcategory: "Unidad Ejecutora Inicial", title: "Contratar 2 consultores (coordinador y apoyo técnico) dentro de SIECA temporalmente", period: "7-12", months: [7,8,9,10,11,12] },
-        { id: "g-7", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Diseño detallado del esquema administrativo, operativo, financiero y funcional conforme al CM y estudio técnico", period: "7-12", months: [7,8,9,10,11,12] },
-        { id: "g-8", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Inicio en funcionamiento", period: "", months: [] }
-      ]
-    },
-    {
-      id: "tecnicos",
-      name: "Técnicos",
-      items: [
-        { id: "t-1", subcategory: "Estudios de ingeniería", title: "Preparación de TdR para el diseño de los proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "1-2", months: [1,2] },
-        { id: "t-2", subcategory: "Estudios de ingeniería", title: "Proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "3-10", months: [3,4,5,6,7,8,9,10] },
-        { id: "t-3", subcategory: "Estudios de derivación de carga y viabilidad", title: "Estudio de demanda, DAP y viabilidad de derivación de carga al CargoPass", period: "2-9", months: [2,3,4,5,6,7,8,9] },
-        { id: "t-4", subcategory: "Análisis económica, financiera, riesgos y legal", title: "Estudio de viabilidad financiera y económica final, análisis de riesgos, acorde a procesos y guías de programación en los países", period: "9-11", months: [9,10,11] },
-        { id: "t-5", subcategory: "Estudios de tiempos de viaje", title: "Estudios de tiempos de viaje de todo el corredor, incluyendo puestos de frontera", period: "3-8", months: [3,4,5,6,7,8] },
-        { id: "t-6", subcategory: "Análisis del OEA para todo el corredor", title: "Diagnóstico para el análisis de los programas nacionales del Operador Económico Autorizado (tipificación, alcance y acuerdos de reconocimiento mutuo)", period: "2-10", months: [2,3,4,5,6,7,8,9,10] }
-      ]
-    },
-    {
-      id: "fondeo",
-      name: "Fondeo",
-      items: [
-        { id: "f-1", subcategory: "Fondo 1 de preinversión", title: "Para Unidad Ejecutora inicial y para estudios de preinversión (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "3-11", months: [3,4,5,6,7,8,9,10,11] },
-        { id: "f-2", subcategory: "Fondo 2 de operación para la gobernanza", title: "Para Unidad Ejecutora inicial y arranque del funcionamiento de la gobernanza (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "", months: [] },
-        { id: "f-3", subcategory: "Fondo 3 implementación", title: "CCLIP del BID más un champion", period: "", months: [] }
-      ]
-    }
-  ];
-
-  const SECTION_STYLES = {
-    gobernanza: { color: "#003F72", chipClass: "chip-blue" },
-    tecnicos: { color: "#0F5B78", chipClass: "chip-teal" },
-    fondeo: { color: "#5B6B7A", chipClass: "chip-slate" }
-  };
-
-  let sections = loadData();
-  let query = "";
-  let collapsedSections = {};
-  let draft = {
-    sectionId: "gobernanza",
-    subcategory: "",
-    title: "",
-    period: "",
-    months: Array(12).fill("")
-  };
-
-  function loadData() {
-    try {
-      const saved = localStorage.getItem("actividades_hitos_data");
-      return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(INITIAL_DATA));
-    } catch {
-      return JSON.parse(JSON.stringify(INITIAL_DATA));
-    }
-  }
-
-  function uid() {
-    return Math.random().toString(36).slice(2, 9);
-  }
-
-  function monthsFromInputs(values) {
-    const out = [];
-    values.forEach((value, index) => {
-      if (String(value).trim() !== "") out.push(index + 1);
-    });
-    return out;
-  }
-
-  function inputsFromMonths(months) {
-    return Array.from({ length: 12 }, (_, i) => months.includes(i + 1) ? "1" : "");
-  }
-
-  function parsePeriodToMonths(period) {
-    const value = String(period || "").trim();
-    if (!value) return [];
-
-    const normalized = value.replace(/–/g, "-").replace(/\s+/g, "");
-
-    if (/^\d+$/.test(normalized)) {
-      const n = Number(normalized);
-      if (n >= 1 && n <= 12) return [n];
-      return [];
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Actividades / Hitos</title>
+  <style>
+    :root{
+      --bg:#f4f7f9;
+      --card:#fff;
+      --line:#d8e1e8;
+      --line-soft:#e7edf2;
+      --text:#1f2a37;
+      --muted:#5b6b7a;
+      --primary:#003f72;
+      --primary-2:#00345e;
+      --shadow:0 6px 20px rgba(16,24,40,.06);
     }
 
-    const rangeMatch = normalized.match(/^(\d+)-(\d+)$/);
-    if (rangeMatch) {
-      const start = Number(rangeMatch[1]);
-      const end = Number(rangeMatch[2]);
+    *{box-sizing:border-box}
 
-      if (start >= 1 && start <= 12 && end >= 1 && end <= 12 && start <= end) {
-        const months = [];
-        for (let i = start; i <= end; i++) months.push(i);
-        return months;
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    button,input,textarea,select{font:inherit}
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:24px;
+      padding:20px 32px;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-inner{
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    .brand-mark{
+      width:6px;
+      height:44px;
+      border-radius:999px;
+      background:var(--primary);
+    }
+
+    .eyebrow{
+      margin:0 0 4px;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .topbar h1{
+      margin:0;
+      color:var(--primary);
+      font-size:32px;
+      line-height:1.1;
+    }
+
+    .topbar-side{
+      text-align:right;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .topbar-side small{
+      display:block;
+      margin-top:4px;
+      color:#7b8794;
+    }
+
+    .container{
+      max-width:1440px;
+      margin:0 auto;
+      padding:24px 32px 40px;
+      display:grid;
+      gap:24px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .card-header{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:20px 20px 12px;
+    }
+
+    .between{
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-start;
+    }
+
+    .card-header h2{
+      margin:0;
+      color:var(--primary);
+      font-size:20px;
+    }
+
+    .card-header p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:10px;
+      border:1px solid transparent;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    .btn-primary:hover{
+      background:var(--primary-2);
+    }
+
+    .btn-outline{
+      background:#fff;
+      color:var(--primary);
+      border-color:#c8d4df;
+    }
+
+    .search-row{
+      display:flex;
+      justify-content:flex-end;
+      padding:0 20px 20px;
+    }
+
+    .search-box{
+      width:min(420px,100%);
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .search-box input{
+      width:100%;
+      border:0;
+      outline:none;
+      background:transparent;
+      color:var(--text);
+    }
+
+    .chart-wrap{
+      padding:0 20px 20px;
+    }
+
+    .chart-grid{
+      min-height:260px;
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      gap:10px;
+      align-items:end;
+    }
+
+    .bar-col{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      height:100%;
+    }
+
+    .bar-track{
+      width:100%;
+      height:200px;
+      border-radius:10px;
+      background:linear-gradient(to top,#eef3f7,#f8fafc);
+      border:1px solid #e5edf3;
+      display:flex;
+      align-items:flex-end;
+      padding:4px;
+    }
+
+    .bar-fill{
+      width:100%;
+      background:var(--primary);
+      border-radius:8px 8px 4px 4px;
+    }
+
+    .bar-value{
+      font-size:12px;
+      font-weight:700;
+      color:var(--primary);
+    }
+
+    .bar-label{
+      font-size:11px;
+      color:var(--muted);
+      text-align:center;
+      line-height:1.2;
+    }
+
+    .scroll-x{
+      overflow-x:auto;
+      padding:20px;
+    }
+
+    .table-wrap{
+      min-width:1280px;
+    }
+
+    .header-row,
+    .data-row{
+      display:grid;
+      grid-template-columns:420px 140px repeat(12,70px);
+    }
+
+    .header-row{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      font-size:14px;
+      font-weight:700;
+      color:#52606d;
+    }
+
+    .header-row > div{
+      padding:14px 12px;
+      border-right:1px solid var(--line);
+      text-align:center;
+    }
+
+    .header-row > div:nth-child(1),
+    .header-row > div:nth-child(2){
+      text-align:left;
+      padding-left:16px;
+    }
+
+    .header-row > div:last-child{
+      border-right:0;
+    }
+
+    .section-block{
+      margin-top:18px;
+    }
+
+    .section-header-bar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .section-title-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .section-title{
+      color:#fff;
+      font-weight:700;
+      border-radius:12px;
+      padding:12px 16px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .section-meta{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:#486170;
+      font-weight:600;
+    }
+
+    .section-duration{
+      background:#eef4f8;
+      border:1px solid #d3e0ea;
+      color:#355266;
+      border-radius:999px;
+      padding:6px 10px;
+    }
+
+    .section-toggle{
+      border:1px solid #cbd5e1;
+      background:#fff;
+      color:#003f72;
+      border-radius:10px;
+      padding:8px 12px;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .section-body{
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .section-body.collapsed{
+      display:none;
+    }
+
+    .data-row{
+      border-bottom:1px solid var(--line-soft);
+    }
+
+    .data-row:last-child{
+      border-bottom:0;
+    }
+
+    .cell{
+      padding:14px 12px;
+      border-right:1px solid var(--line-soft);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .cell.left{
+      justify-content:flex-start;
+      align-items:flex-start;
+      padding:14px 16px;
+      gap:10px;
+    }
+
+    .cell:last-child{
+      border-right:0;
+    }
+
+    .activity-wrap{
+      width:100%;
+    }
+
+    .activity-wrap .chip{
+      margin-bottom:8px;
+    }
+
+    .col-activity textarea,
+    .field textarea{
+      width:100%;
+      min-height:84px;
+      border:1px solid #d6dee5;
+      border-radius:10px;
+      background:#fbfdfe;
+      padding:12px;
+      resize:vertical;
+      outline:none;
+    }
+
+    .small-input{
+      width:100%;
+      height:42px;
+      border:1px solid #d6dee5;
+      border-radius:10px;
+      background:#fbfdfe;
+      padding:0 12px;
+      text-align:center;
+      font-weight:600;
+      color:#486170;
+      outline:none;
+    }
+
+    .month-input{
+      width:54px;
+      height:40px;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      text-align:center;
+      font-weight:600;
+      color:#334155;
+      outline:none;
+      cursor:pointer;
+    }
+
+    .month-input.active{
+      background:#003f72;
+      color:#003f72;
+      border-color:#003f72;
+    }
+
+    .month-input.active::placeholder{
+      color:#003f72;
+    }
+
+    .chip{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid;
+      font-size:12px;
+      font-weight:700;
+      line-height:1.3;
+    }
+
+    .chip-blue{
+      background:#eaf3f9;
+      color:#003f72;
+      border-color:#c6dceb;
+    }
+
+    .chip-teal{
+      background:#ecfeff;
+      color:#155e75;
+      border-color:#a5f3fc;
+    }
+
+    .chip-slate{
+      background:#f1f5f9;
+      color:#334155;
+      border-color:#cbd5e1;
+    }
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+
+    .modal-backdrop.show{
+      display:flex;
+    }
+
+    .modal{
+      width:min(900px,100%);
+      background:#fff;
+      border-radius:16px;
+      border:1px solid var(--line);
+      box-shadow:0 24px 60px rgba(15,23,42,.18);
+      padding:20px;
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      color:var(--primary);
+    }
+
+    .modal-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-size:14px;
+      font-weight:600;
+      color:#334155;
+    }
+
+    .field{
+      margin-top:14px;
+    }
+
+    input,select{
+      width:100%;
+      height:42px;
+      border-radius:10px;
+      border:1px solid #cbd5e1;
+      padding:0 12px;
+      outline:none;
+      background:#fff;
+    }
+
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:18px;
+    }
+
+    .month-edit-grid{
+      display:grid;
+      grid-template-columns:repeat(6,minmax(0,1fr));
+      gap:8px;
+    }
+
+    .icon-btn{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      border:1px solid #cbd5e1;
+      background:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#7a1f1f;
+    }
+
+    @media (max-width:1024px){
+      .topbar{
+        padding:18px 20px;
+      }
+
+      .container{
+        padding:20px;
+      }
+
+      .topbar-side{
+        display:none;
       }
     }
 
-    return [];
-  }
+    @media (max-width:720px){
+      .modal-grid{
+        grid-template-columns:1fr;
+      }
 
-  function filteredSections() {
-    const q = query.trim().toLowerCase();
-    if (!q) return sections;
+      .topbar h1{
+        font-size:26px;
+      }
 
-    return sections
-      .map(section => ({
-        ...section,
-        items: section.items.filter(item =>
-          section.name.toLowerCase().includes(q) ||
-          item.subcategory.toLowerCase().includes(q) ||
-          item.title.toLowerCase().includes(q) ||
-          (item.period || "").toLowerCase().includes(q)
-        )
-      }))
-      .filter(section => section.items.length > 0);
-  }
+      .between{
+        flex-direction:column;
+        align-items:stretch;
+      }
 
-  function monthlyCounts() {
-    const counts = Array.from({ length: 12 }, (_, i) => ({ mes: i + 1, total: 0 }));
-    sections.forEach(section => {
-      section.items.forEach(item => {
-        item.months.forEach(m => counts[m - 1].total++);
-      });
-    });
-    return counts;
-  }
+      .actions{
+        width:100%;
+      }
 
-  function getSectionDuration(section) {
-    const allMonths = section.items.flatMap(item => item.months || []);
-    if (!allMonths.length) return "Sin periodo";
-    const min = Math.min(...allMonths);
-    const max = Math.max(...allMonths);
-    return min === max ? `${min}` : `${min}-${max}`;
-  }
+      .btn{
+        justify-content:center;
+        width:100%;
+      }
 
-  function updateItem(sectionId, itemId, patch) {
-    sections = sections.map(section =>
-      section.id !== sectionId
-        ? section
-        : {
-            ...section,
-            items: section.items.map(item =>
-              item.id === itemId ? { ...item, ...patch } : item
-            )
-          }
-    );
-    hasUnsavedChanges = true;
-    render();
-  }
-
-  function saveChanges() {
-    const ok = confirm("¿Quieres guardar los cambios?");
-    if (!ok) return;
-
-    const pwd = prompt("Ingresa la contraseña para guardar:");
-    if (pwd !== PASSWORD) {
-      alert("Contraseña incorrecta.");
-      return;
+      .search-row{
+        padding:0 20px 20px;
+      }
     }
-
-    localStorage.setItem("actividades_hitos_data", JSON.stringify(sections));
-    hasUnsavedChanges = false;
-    alert("Cambios guardados.");
-  }
-
-  function exportExcelHtml() {
-    let html = '<table border="1"><tr><th>Sección</th><th>Subcategoría</th><th>Actividad</th><th>Periodo</th>';
-    for (let i = 1; i <= 12; i++) html += `<th>Mes ${i}</th>`;
-    html += '</tr>';
-
-    sections.forEach(section => {
-      section.items.forEach(item => {
-        html += `<tr>
-          <td>${escapeHtml(section.name)}</td>
-          <td>${escapeHtml(item.subcategory)}</td>
-          <td>${escapeHtml(item.title)}</td>
-          <td>${escapeHtml(item.period || "")}</td>
-        `;
-        for (let i = 1; i <= 12; i++) {
-          html += `<td>${item.months.includes(i) ? 1 : ''}</td>`;
-        }
-        html += '</tr>';
-      });
-    });
-
-    html += '</table>';
-
-    const full = `<html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
-    const blob = new Blob([full], { type: 'application/vnd.ms-excel' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'actividades_hitos.xls';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  }
-
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;');
-  }
-
-  function renderChart() {
-    const c = document.getElementById('chartGrid');
-    const data = monthlyCounts();
-    const max = Math.max(1, ...data.map(d => d.total));
-
-    c.innerHTML = data.map(d => `
-      <div class="bar-col">
-        <div class="bar-track">
-          <div class="bar-fill" style="height:${(d.total / max) * 100}%"></div>
-        </div>
-        <div class="bar-value">${d.total}</div>
-        <div class="bar-label">Mes ${d.mes}</div>
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-mark"></div>
+      <div>
+        <p class="eyebrow">Banco Interamericano de Desarrollo</p>
+        <h1>Actividades / Hitos</h1>
       </div>
-    `).join('');
-  }
+    </div>
+    <div class="topbar-side">
+      <div>Cronograma editable</div>
+      <small>Periodo sincroniza meses</small>
+    </div>
+  </header>
 
-  function renderTable() {
-    const wrap = document.getElementById("tableSections");
-
-    wrap.innerHTML = filteredSections().map(section => {
-      const style = SECTION_STYLES[section.id];
-      const duration = getSectionDuration(section);
-      const isCollapsed = !!collapsedSections[section.id];
-
-      return `
-        <div class="section-block">
-          <div class="section-header-bar">
-            <div class="section-title-wrap">
-              <div class="section-title" style="background:${style.color}">
-                ${escapeHtml(section.name)}
-              </div>
-              <div class="section-meta">
-                <span class="section-duration">Duración total: ${duration}</span>
-              </div>
-            </div>
-            <button class="section-toggle" data-toggle-section="${section.id}">
-              ${isCollapsed ? 'Expandir' : 'Contraer'}
-            </button>
-          </div>
-
-          <div class="section-body ${isCollapsed ? 'collapsed' : ''}">
-            ${section.items.map(item => {
-              const monthInputs = inputsFromMonths(item.months);
-
-              return `
-                <div class="data-row">
-                  <div class="cell left col-activity">
-                    <div>
-                      <div style="margin-bottom:8px">
-                        <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
-                      </div>
-                      <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
-                    </div>
-                  </div>
-
-                  <div class="cell">
-                    <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="2-5 o 2">
-                  </div>
-
-                  ${monthInputs.map((value, idx) => `
-                    <div class="cell">
-                      <input
-                        class="month-input ${value ? 'active' : ''}"
-                        data-month="${section.id}|${item.id}|${idx + 1}"
-                        value=""
-                        placeholder=""
-                        readonly
-                      >
-                    </div>
-                  `).join("")}
-                </div>
-              `;
-            }).join("")}
-          </div>
+  <main class="container">
+    <section class="card">
+      <div class="card-header between">
+        <div>
+          <h2>Panel de control</h2>
+          <p>Edita el periodo manualmente. Si escribes 2-5, se activan automáticamente los meses 2, 3, 4 y 5.</p>
         </div>
-      `;
-    }).join("");
-  }
+        <div class="actions">
+          <button class="btn btn-outline" id="exportBtn">Exportar en Excel</button>
+          <button class="btn btn-primary" id="saveBtn">Guardar cambios</button>
+          <button class="btn btn-primary" id="addBtn">Agregar actividad</button>
+        </div>
+      </div>
 
-  function renderDraftSections() {
-    document.getElementById('draftSection').innerHTML = sections.map(s => `
-      <option value="${s.id}" ${s.id === draft.sectionId ? 'selected' : ''}>
-        ${escapeHtml(s.name)}
-      </option>
-    `).join('');
-  }
+      <div class="search-row">
+        <div class="search-box">
+          <span>🔎</span>
+          <input id="searchInput" placeholder="Buscar actividad o categoría">
+        </div>
+      </div>
+    </section>
 
-  function renderDraftMonths() {
-    document.getElementById("draftMonths").innerHTML = Array.from({ length: 12 }, (_, i) => `
-      <input
-        class="month-input ${draft.months[i] ? 'active' : ''}"
-        data-draft-month="${i}"
-        value=""
-        placeholder="${i + 1}"
-        readonly
-      >
-    `).join("");
-  }
+    <section class="card">
+      <div class="card-header">
+        <h2>Carga de actividades por mes</h2>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-grid" id="chartGrid"></div>
+      </div>
+    </section>
 
-  function bindEvents() {
-    document.querySelectorAll('textarea[data-title]').forEach(el => {
-      el.onchange = () => {
-        const [sectionId, itemId] = el.dataset.title.split('|');
-        updateItem(sectionId, itemId, { title: el.value });
-      };
-    });
+    <section class="card">
+      <div class="scroll-x">
+        <div class="table-wrap">
+          <div class="header-row">
+            <div>Actividad</div>
+            <div>Periodo</div>
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+            <div>11</div>
+            <div>12</div>
+          </div>
+          <div id="tableSections"></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    document.querySelectorAll('[data-period]').forEach(el => {
-      el.onchange = () => {
-        const [sectionId, itemId] = el.dataset.period.split('|');
-        const newPeriod = el.value.trim();
-        const parsedMonths = parsePeriodToMonths(newPeriod);
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Nueva actividad</h3>
+        <button class="icon-btn" id="closeModal">✕</button>
+      </div>
 
-        updateItem(sectionId, itemId, {
-          period: newPeriod,
-          months: parsedMonths
-        });
-      };
-    });
+      <div class="modal-grid">
+        <div>
+          <label>Sección</label>
+          <select id="draftSection"></select>
+        </div>
+        <div>
+          <label>Subcategoría</label>
+          <input id="draftSubcategory" placeholder="Ej. Convenio / Tratado Marco">
+        </div>
+      </div>
 
-    document.querySelectorAll('[data-month]').forEach(el => {
-      el.onclick = () => {
-        const [sectionId, itemId, month] = el.dataset.month.split('|');
-        const monthNumber = Number(month);
+      <div class="field">
+        <label>Actividad</label>
+        <textarea id="draftTitle" placeholder="Describe la actividad o hito"></textarea>
+      </div>
 
-        const section = sections.find(s => s.id === sectionId);
-        const item = section.items.find(i => i.id === itemId);
+      <div class="field">
+        <label>Periodo</label>
+        <input id="draftPeriod" placeholder="Ej. 2-5 o 2">
+      </div>
 
-        const hasMonth = item.months.includes(monthNumber);
-        const newMonths = hasMonth
-          ? item.months.filter(m => m !== monthNumber)
-          : [...item.months, monthNumber].sort((a, b) => a - b);
+      <div class="field">
+        <label>Meses (opcional, si no llenas periodo)</label>
+        <div class="month-edit-grid" id="draftMonths"></div>
+      </div>
 
-        updateItem(sectionId, itemId, { months: newMonths });
-      };
-    });
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="saveDraft">Guardar actividad</button>
+      </div>
+    </div>
+  </div>
 
-    document.querySelectorAll('[data-draft-month]').forEach(el => {
-      el.onclick = () => {
-        const idx = Number(el.dataset.draftMonth);
-        draft.months[idx] = draft.months[idx] ? "" : "1";
-        renderDraftMonths();
-      };
-    });
+  <script>
+    const PASSWORD = "RUTA2026";
+    let hasUnsavedChanges = false;
 
-    document.querySelectorAll('[data-toggle-section]').forEach(el => {
-      el.onclick = () => {
-        const id = el.dataset.toggleSection;
-        collapsedSections[id] = !collapsedSections[id];
-        render();
-      };
-    });
-  }
+    const INITIAL_DATA = [
+      {
+        id: "gobernanza",
+        name: "Gobernanza",
+        items: [
+          { id: "g-1", subcategory: "Convenio / Tratado Marco", title: "Contratar consultor abogado (Alan Thomson) para acompañamiento del BID en la estructuración técnica de la gobernanza", period: "2", months: [2] },
+          { id: "g-2", subcategory: "Convenio / Tratado Marco", title: "Análisis sobre si corresponde convenio o tratado marco y modelo de gobernanza para proyectos piloto", period: "3", months: [3] },
+          { id: "g-3", subcategory: "Convenio / Tratado Marco", title: "Preparación y socialización del borrador de convenio/tratado con comisiones y/o gobernanza para pilotos", period: "4-5", months: [4,5] },
+          { id: "g-4", subcategory: "Convenio / Tratado Marco", title: "Firma del borrador de convenio/tratado marco en consejo intersectorial de ministros", period: "6", months: [6] },
+          { id: "g-5", subcategory: "Convenio / Tratado Marco", title: "Instrumento legal borrador para la gobernanza de los pilotos (a nivel de ministros de los 2 países participantes)", period: "6", months: [6] },
+          { id: "g-6", subcategory: "Unidad Ejecutora Inicial", title: "Contratar 2 consultores (coordinador y apoyo técnico) dentro de SIECA temporalmente", period: "7-12", months: [7,8,9,10,11,12] },
+          { id: "g-7", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Diseño detallado del esquema administrativo, operativo, financiero y funcional conforme al CM y estudio técnico", period: "7-12", months: [7,8,9,10,11,12] },
+          { id: "g-8", subcategory: "Entrada en funcionamiento de instituciones regionales nuevas", title: "Inicio en funcionamiento", period: "", months: [] }
+        ]
+      },
+      {
+        id: "tecnicos",
+        name: "Técnicos",
+        items: [
+          { id: "t-1", subcategory: "Estudios de ingeniería", title: "Preparación de TdR para el diseño de los proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "1-2", months: [1,2] },
+          { id: "t-2", subcategory: "Estudios de ingeniería", title: "Proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass", period: "3-10", months: [3,4,5,6,7,8,9,10] },
+          { id: "t-3", subcategory: "Estudios de derivación de carga y viabilidad", title: "Estudio de demanda, DAP y viabilidad de derivación de carga al CargoPass", period: "2-9", months: [2,3,4,5,6,7,8,9] },
+          { id: "t-4", subcategory: "Análisis económica, financiera, riesgos y legal", title: "Estudio de viabilidad financiera y económica final, análisis de riesgos, acorde a procesos y guías de programación en los países", period: "9-11", months: [9,10,11] },
+          { id: "t-5", subcategory: "Estudios de tiempos de viaje", title: "Estudios de tiempos de viaje de todo el corredor, incluyendo puestos de frontera", period: "3-8", months: [3,4,5,6,7,8] },
+          { id: "t-6", subcategory: "Análisis del OEA para todo el corredor", title: "Diagnóstico para el análisis de los programas nacionales del Operador Económico Autorizado (tipificación, alcance y acuerdos de reconocimiento mutuo)", period: "2-10", months: [2,3,4,5,6,7,8,9,10] }
+        ]
+      },
+      {
+        id: "fondeo",
+        name: "Fondeo",
+        items: [
+          { id: "f-1", subcategory: "Fondo 1 de preinversión", title: "Para Unidad Ejecutora inicial y para estudios de preinversión (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "3-11", months: [3,4,5,6,7,8,9,10,11] },
+          { id: "f-2", subcategory: "Fondo 2 de operación para la gobernanza", title: "Para Unidad Ejecutora inicial y arranque del funcionamiento de la gobernanza (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)", period: "", months: [] },
+          { id: "f-3", subcategory: "Fondo 3 implementación", title: "CCLIP del BID más un champion", period: "", months: [] }
+        ]
+      }
+    ];
 
-  function render() {
-    renderChart();
-    renderTable();
-    renderDraftSections();
-    renderDraftMonths();
-    bindEvents();
-  }
+    const SECTION_STYLES = {
+      gobernanza: { color: "#003F72", chipClass: "chip-blue" },
+      tecnicos: { color: "#0F5B78", chipClass: "chip-teal" },
+      fondeo: { color: "#5B6B7A", chipClass: "chip-slate" }
+    };
 
-  document.getElementById('searchInput').oninput = e => {
-    query = e.target.value;
-    render();
-  };
-
-  document.getElementById('exportBtn').onclick = exportExcelHtml;
-  document.getElementById('saveBtn').onclick = saveChanges;
-
-  document.getElementById('addBtn').onclick = () => {
-    document.getElementById('modalBackdrop').classList.add('show');
-  };
-
-  document.getElementById('closeModal').onclick = () => {
-    document.getElementById('modalBackdrop').classList.remove('show');
-  };
-
-  document.getElementById('modalBackdrop').onclick = e => {
-    if (e.target.id === 'modalBackdrop') {
-      e.currentTarget.classList.remove('show');
-    }
-  };
-
-  document.getElementById('draftSection').onchange = e => {
-    draft.sectionId = e.target.value;
-  };
-
-  document.getElementById('draftSubcategory').oninput = e => {
-    draft.subcategory = e.target.value;
-  };
-
-  document.getElementById('draftTitle').oninput = e => {
-    draft.title = e.target.value;
-  };
-
-  document.getElementById('draftPeriod').oninput = e => {
-    draft.period = e.target.value;
-  };
-
-  document.getElementById('saveDraft').onclick = () => {
-    if (!draft.subcategory.trim() || !draft.title.trim()) return;
-
-    const months = draft.period.trim()
-      ? parsePeriodToMonths(draft.period)
-      : monthsFromInputs(draft.months);
-
-    sections = sections.map(section =>
-      section.id !== draft.sectionId
-        ? section
-        : {
-            ...section,
-            items: [
-              ...section.items,
-              {
-                id: uid(),
-                subcategory: draft.subcategory,
-                title: draft.title,
-                period: draft.period,
-                months
-              }
-            ]
-          }
-    );
-
-    hasUnsavedChanges = true;
-
-    draft = {
-      sectionId: draft.sectionId,
+    let sections = loadData();
+    let query = "";
+    let collapsedSections = {};
+    let draft = {
+      sectionId: "gobernanza",
       subcategory: "",
       title: "",
       period: "",
       months: Array(12).fill("")
     };
 
-    document.getElementById('draftSubcategory').value = '';
-    document.getElementById('draftTitle').value = '';
-    document.getElementById('draftPeriod').value = '';
-    document.getElementById('modalBackdrop').classList.remove('show');
+    function loadData() {
+      try {
+        const saved = localStorage.getItem("actividades_hitos_data");
+        return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(INITIAL_DATA));
+      } catch {
+        return JSON.parse(JSON.stringify(INITIAL_DATA));
+      }
+    }
+
+    function uid() {
+      return Math.random().toString(36).slice(2, 9);
+    }
+
+    function monthsFromInputs(values) {
+      const out = [];
+      values.forEach((value, index) => {
+        if (String(value).trim() !== "") out.push(index + 1);
+      });
+      return out;
+    }
+
+    function inputsFromMonths(months) {
+      return Array.from({ length: 12 }, (_, i) => months.includes(i + 1) ? "1" : "");
+    }
+
+    function parsePeriodToMonths(period) {
+      const value = String(period || "").trim();
+      if (!value) return [];
+
+      const normalized = value.replace(/–/g, "-").replace(/\s+/g, "");
+
+      if (/^\d+$/.test(normalized)) {
+        const n = Number(normalized);
+        if (n >= 1 && n <= 12) return [n];
+        return [];
+      }
+
+      const rangeMatch = normalized.match(/^(\d+)-(\d+)$/);
+      if (rangeMatch) {
+        const start = Number(rangeMatch[1]);
+        const end = Number(rangeMatch[2]);
+
+        if (start >= 1 && start <= 12 && end >= 1 && end <= 12 && start <= end) {
+          const months = [];
+          for (let i = start; i <= end; i++) months.push(i);
+          return months;
+        }
+      }
+
+      return [];
+    }
+
+    function filteredSections() {
+      const q = query.trim().toLowerCase();
+      if (!q) return sections;
+
+      return sections
+        .map(section => ({
+          ...section,
+          items: section.items.filter(item =>
+            section.name.toLowerCase().includes(q) ||
+            item.subcategory.toLowerCase().includes(q) ||
+            item.title.toLowerCase().includes(q) ||
+            (item.period || "").toLowerCase().includes(q)
+          )
+        }))
+        .filter(section => section.items.length > 0);
+    }
+
+    function monthlyCounts() {
+      const counts = Array.from({ length: 12 }, (_, i) => ({ mes: i + 1, total: 0 }));
+      sections.forEach(section => {
+        section.items.forEach(item => {
+          item.months.forEach(m => counts[m - 1].total++);
+        });
+      });
+      return counts;
+    }
+
+    function getSectionDuration(section) {
+      const allMonths = section.items.flatMap(item => item.months || []);
+      if (!allMonths.length) return "Sin periodo";
+      const min = Math.min(...allMonths);
+      const max = Math.max(...allMonths);
+      return min === max ? `${min}` : `${min}-${max}`;
+    }
+
+    function updateItem(sectionId, itemId, patch) {
+      sections = sections.map(section =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              items: section.items.map(item =>
+                item.id === itemId ? { ...item, ...patch } : item
+              )
+            }
+      );
+      hasUnsavedChanges = true;
+      render();
+    }
+
+    function saveChanges() {
+      const ok = confirm("¿Quieres guardar los cambios?");
+      if (!ok) return;
+
+      const pwd = prompt("Ingresa la contraseña para guardar:");
+      if (pwd !== PASSWORD) {
+        alert("Contraseña incorrecta.");
+        return;
+      }
+
+      localStorage.setItem("actividades_hitos_data", JSON.stringify(sections));
+      hasUnsavedChanges = false;
+      alert("Cambios guardados.");
+    }
+
+    function exportExcelHtml() {
+      let html = '<table border="1"><tr><th>Sección</th><th>Subcategoría</th><th>Actividad</th><th>Periodo</th>';
+      for (let i = 1; i <= 12; i++) html += `<th>Mes ${i}</th>`;
+      html += '</tr>';
+
+      sections.forEach(section => {
+        section.items.forEach(item => {
+          html += `<tr>
+            <td>${escapeHtml(section.name)}</td>
+            <td>${escapeHtml(item.subcategory)}</td>
+            <td>${escapeHtml(item.title)}</td>
+            <td>${escapeHtml(item.period || "")}</td>
+          `;
+          for (let i = 1; i <= 12; i++) {
+            html += `<td>${item.months.includes(i) ? 1 : ''}</td>`;
+          }
+          html += '</tr>';
+        });
+      });
+
+      html += '</table>';
+
+      const full = `<html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
+      const blob = new Blob([full], { type: 'application/vnd.ms-excel' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'actividades_hitos.xls';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
+
+    function renderChart() {
+      const c = document.getElementById('chartGrid');
+      const data = monthlyCounts();
+      const max = Math.max(1, ...data.map(d => d.total));
+
+      c.innerHTML = data.map(d => `
+        <div class="bar-col">
+          <div class="bar-track">
+            <div class="bar-fill" style="height:${(d.total / max) * 100}%"></div>
+          </div>
+          <div class="bar-value">${d.total}</div>
+          <div class="bar-label">Mes ${d.mes}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderTable() {
+      const wrap = document.getElementById("tableSections");
+
+      wrap.innerHTML = filteredSections().map(section => {
+        const style = SECTION_STYLES[section.id];
+        const duration = getSectionDuration(section);
+        const isCollapsed = !!collapsedSections[section.id];
+
+        return `
+          <div class="section-block">
+            <div class="section-header-bar">
+              <div class="section-title-wrap">
+                <div class="section-title" style="background:${style.color}">
+                  ${escapeHtml(section.name)}
+                </div>
+                <div class="section-meta">
+                  <span class="section-duration">Duración total: ${duration}</span>
+                </div>
+              </div>
+
+              <button class="section-toggle" data-toggle-section="${section.id}">
+                ${isCollapsed ? 'Expandir' : 'Contraer'}
+              </button>
+            </div>
+
+            <div class="section-body ${isCollapsed ? 'collapsed' : ''}">
+              ${section.items.map(item => {
+                const monthInputs = inputsFromMonths(item.months);
+
+                return `
+                  <div class="data-row">
+                    <div class="cell left col-activity">
+                      <div class="activity-wrap">
+                        <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
+                        <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                      </div>
+                    </div>
+
+                    <div class="cell">
+                      <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="2-5 o 2">
+                    </div>
+
+                    ${monthInputs.map((value, idx) => `
+                      <div class="cell">
+                        <input
+                          class="month-input ${value ? 'active' : ''}"
+                          data-month="${section.id}|${item.id}|${idx + 1}"
+                          value=""
+                          placeholder=""
+                          readonly
+                        >
+                      </div>
+                    `).join("")}
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderDraftSections() {
+      document.getElementById('draftSection').innerHTML = sections.map(s => `
+        <option value="${s.id}" ${s.id === draft.sectionId ? 'selected' : ''}>
+          ${escapeHtml(s.name)}
+        </option>
+      `).join('');
+    }
+
+    function renderDraftMonths() {
+      document.getElementById("draftMonths").innerHTML = Array.from({ length: 12 }, (_, i) => `
+        <input
+          class="month-input ${draft.months[i] ? 'active' : ''}"
+          data-draft-month="${i}"
+          value=""
+          placeholder="${i + 1}"
+          readonly
+        >
+      `).join("");
+    }
+
+    function bindEvents() {
+      document.querySelectorAll('textarea[data-title]').forEach(el => {
+        el.onchange = () => {
+          const [sectionId, itemId] = el.dataset.title.split('|');
+          updateItem(sectionId, itemId, { title: el.value });
+        };
+      });
+
+      document.querySelectorAll('[data-period]').forEach(el => {
+        el.onchange = () => {
+          const [sectionId, itemId] = el.dataset.period.split('|');
+          const newPeriod = el.value.trim();
+          const parsedMonths = parsePeriodToMonths(newPeriod);
+
+          updateItem(sectionId, itemId, {
+            period: newPeriod,
+            months: parsedMonths
+          });
+        };
+      });
+
+      document.querySelectorAll('[data-month]').forEach(el => {
+        el.onclick = () => {
+          const [sectionId, itemId, month] = el.dataset.month.split('|');
+          const monthNumber = Number(month);
+
+          const section = sections.find(s => s.id === sectionId);
+          const item = section.items.find(i => i.id === itemId);
+
+          const hasMonth = item.months.includes(monthNumber);
+          const newMonths = hasMonth
+            ? item.months.filter(m => m !== monthNumber)
+            : [...item.months, monthNumber].sort((a, b) => a - b);
+
+          updateItem(sectionId, itemId, { months: newMonths });
+        };
+      });
+
+      document.querySelectorAll('[data-draft-month]').forEach(el => {
+        el.onclick = () => {
+          const idx = Number(el.dataset.draftMonth);
+          draft.months[idx] = draft.months[idx] ? "" : "1";
+          renderDraftMonths();
+        };
+      });
+
+      document.querySelectorAll('[data-toggle-section]').forEach(el => {
+        el.onclick = () => {
+          const id = el.dataset.toggleSection;
+          collapsedSections[id] = !collapsedSections[id];
+          render();
+        };
+      });
+    }
+
+    function render() {
+      renderChart();
+      renderTable();
+      renderDraftSections();
+      renderDraftMonths();
+      bindEvents();
+    }
+
+    document.getElementById('searchInput').oninput = e => {
+      query = e.target.value;
+      render();
+    };
+
+    document.getElementById('exportBtn').onclick = exportExcelHtml;
+    document.getElementById('saveBtn').onclick = saveChanges;
+
+    document.getElementById('addBtn').onclick = () => {
+      document.getElementById('modalBackdrop').classList.add('show');
+    };
+
+    document.getElementById('closeModal').onclick = () => {
+      document.getElementById('modalBackdrop').classList.remove('show');
+    };
+
+    document.getElementById('modalBackdrop').onclick = e => {
+      if (e.target.id === 'modalBackdrop') {
+        e.currentTarget.classList.remove('show');
+      }
+    };
+
+    document.getElementById('draftSection').onchange = e => {
+      draft.sectionId = e.target.value;
+    };
+
+    document.getElementById('draftSubcategory').oninput = e => {
+      draft.subcategory = e.target.value;
+    };
+
+    document.getElementById('draftTitle').oninput = e => {
+      draft.title = e.target.value;
+    };
+
+    document.getElementById('draftPeriod').oninput = e => {
+      draft.period = e.target.value;
+    };
+
+    document.getElementById('saveDraft').onclick = () => {
+      if (!draft.subcategory.trim() || !draft.title.trim()) return;
+
+      const months = draft.period.trim()
+        ? parsePeriodToMonths(draft.period)
+        : monthsFromInputs(draft.months);
+
+      sections = sections.map(section =>
+        section.id !== draft.sectionId
+          ? section
+          : {
+              ...section,
+              items: [
+                ...section.items,
+                {
+                  id: uid(),
+                  subcategory: draft.subcategory,
+                  title: draft.title,
+                  period: draft.period,
+                  months
+                }
+              ]
+            }
+      );
+
+      hasUnsavedChanges = true;
+
+      draft = {
+        sectionId: draft.sectionId,
+        subcategory: "",
+        title: "",
+        period: "",
+        months: Array(12).fill("")
+      };
+
+      document.getElementById('draftSubcategory').value = '';
+      document.getElementById('draftTitle').value = '';
+      document.getElementById('draftPeriod').value = '';
+      document.getElementById('modalBackdrop').classList.remove('show');
+      render();
+    };
+
+    window.addEventListener("beforeunload", function (e) {
+      if (!hasUnsavedChanges) return;
+      e.preventDefault();
+      e.returnValue = "";
+    });
+
     render();
-  };
-
-  window.addEventListener("beforeunload", function (e) {
-    if (!hasUnsavedChanges) return;
-    e.preventDefault();
-    e.returnValue = "";
-  });
-
-  render();
-</script>
+  </script>
+</body>
+</html>
