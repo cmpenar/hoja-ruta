@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Actividades / Hitos</title>
+  <style>
+    :root{
+      --bg:#f4f7f9;
+      --card:#fff;
+      --line:#d8e1e8;
+      --line-soft:#e7edf2;
+      --text:#1f2a37;
+      --muted:#5b6b7a;
+      --primary:#003f72;
+      --primary-2:#00345e;
+      --shadow:0 6px 20px rgba(16,24,40,.06);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    button,input,textarea,select{font:inherit}
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:24px;
+      padding:20px 32px;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-inner{display:flex;align-items:center;gap:16px}
+    .brand-mark{width:6px;height:44px;border-radius:999px;background:var(--primary)}
+    .eyebrow{
+      margin:0 0 4px;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .topbar h1{
+      margin:0;
+      color:var(--primary);
+      font-size:32px;
+      line-height:1.1;
+    }
+
+    .topbar-side{
+      text-align:right;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .topbar-side small{
+      display:block;
+      margin-top:4px;
+      color:#7b8794;
+    }
+
+    .container{
+      max-width:1440px;
+      margin:0 auto;
+      padding:24px 32px 40px;
+      display:grid;
+      gap:24px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .card-header{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:20px 20px 12px;
+    }
+
+    .between{
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-start;
+    }
+
+    .card-header h2{
+      margin:0;
+      color:var(--primary);
+      font-size:20px;
+    }
+
+    .card-header p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:10px;
+      border:1px solid transparent;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    .btn-primary:hover{
+      background:var(--primary-2);
+    }
+
+    .btn-outline{
+      background:#fff;
+      color:var(--primary);
+      border-color:#c8d4df;
+    }
+
+    .stats-grid{
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      padding:0 20px 20px;
+    }
+
+    .mini-card{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:16px;
+      min-height:86px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      background:#fff;
+    }
+
+    .mini-card span{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#7b8794;
+      font-weight:700;
+    }
+
+    .mini-card strong{
+      margin-top:8px;
+      color:var(--primary);
+      font-size:30px;
+    }
+
+    .search-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .search-wrap input{
+      width:100%;
+      border:0;
+      outline:none;
+      background:transparent;
+      color:var(--text);
+    }
+
+    .chart-wrap{padding:0 20px 20px}
+
+    .chart-grid{
+      height:240px;
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      gap:10px;
+      align-items:end;
+    }
+
+    .bar-col{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      height:100%;
+    }
+
+    .bar-track{
+      width:100%;
+      height:200px;
+      border-radius:10px;
+      background:linear-gradient(to top,#eef3f7,#f8fafc);
+      border:1px solid #e5edf3;
+      display:flex;
+      align-items:flex-end;
+      padding:4px;
+    }
+
+    .bar-fill{
+      width:100%;
+      background:var(--primary);
+      border-radius:8px 8px 4px 4px;
+    }
+
+    .bar-label{font-size:12px;color:var(--muted)}
+    .bar-value{font-size:12px;font-weight:700;color:var(--primary)}
+
+    .tabs{
+      display:inline-flex;
+      gap:6px;
+      background:#eaf0f5;
+      padding:6px;
+      border-radius:12px;
+    }
+
+    .tab{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border:0;
+      background:transparent;
+      border-radius:10px;
+      cursor:pointer;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .tab.active{
+      background:#fff;
+      color:var(--primary);
+      box-shadow:0 1px 2px rgba(0,0,0,.05);
+    }
+
+    .legend{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      padding:20px 20px 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .legend-item{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .pill{
+      width:32px;
+      height:12px;
+      border-radius:999px;
+      display:inline-block;
+      background:var(--primary);
+    }
+
+    .scroll-x{overflow-x:auto;padding:20px}
+    .gantt-table{min-width:1350px}
+
+    .gantt-header,.gantt-row{
+      display:grid;
+      grid-template-columns:220px 420px 140px 1fr;
+    }
+
+    .gantt-header{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      font-size:14px;
+      font-weight:700;
+      color:#52606d;
+    }
+
+    .gantt-header>div{
+      padding:14px 16px;
+      border-right:1px solid var(--line);
+    }
+
+    .gantt-header>div:last-child{border-right:0}
+
+    .col-months{min-width:420px}
+
+    .gantt-header .col-months{
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      padding:0;
+    }
+
+    .month-head{
+      padding:14px 0;
+      text-align:center;
+      border-right:1px solid var(--line);
+    }
+
+    .month-head:last-child{border-right:0}
+
+    .section-block{margin-top:18px}
+
+    .section-title{
+      color:#fff;
+      font-weight:700;
+      border-radius:12px;
+      padding:12px 16px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .section-body{
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .gantt-row{border-bottom:1px solid var(--line-soft)}
+    .gantt-row:last-child{border-bottom:0}
+
+    .cell{
+      padding:14px 16px;
+      border-right:1px solid var(--line-soft);
+    }
+
+    .cell:last-child{border-right:0}
+
+    .center{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#486170;
+      font-weight:600;
+    }
+
+    .col-activity textarea,
+    .list-main textarea,
+    .field textarea{
+      width:100%;
+      min-height:84px;
+      border:1px solid #d6dee5;
+      border-radius:10px;
+      background:#fbfdfe;
+      padding:12px;
+      resize:vertical;
+      outline:none;
+    }
+
+    .period-input{
+      width:100%;
+      height:42px;
+      border:1px solid #d6dee5;
+      border-radius:10px;
+      background:#fbfdfe;
+      padding:0 12px;
+      text-align:center;
+      font-weight:600;
+      color:#486170;
+      outline:none;
+    }
+
+    .chip{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid;
+      font-size:12px;
+      font-weight:700;
+      line-height:1.3;
+    }
+
+    .chip-blue{background:#eaf3f9;color:#003f72;border-color:#c6dceb}
+    .chip-teal{background:#ecfeff;color:#155e75;border-color:#a5f3fc}
+    .chip-slate{background:#f1f5f9;color:#334155;border-color:#cbd5e1}
+
+    .months-grid{
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      gap:8px;
+    }
+
+    .month-btn{
+      min-width:40px;
+      height:34px;
+      border-radius:10px;
+      border:1px solid #cbd5e1;
+      background:#fff;
+      color:#334155;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .month-btn.active{
+      background:var(--primary);
+      color:#fff;
+      border-color:var(--primary);
+    }
+
+    .list-grid{display:grid;gap:16px}
+    .section-header{padding-bottom:16px;border-bottom:1px solid #eef2f6}
+    .list-items{padding:0 20px 20px;display:grid;gap:14px}
+
+    .list-item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:16px;
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      background:#fff;
+    }
+
+    .list-main{
+      flex:1;
+      display:grid;
+      gap:10px;
+    }
+
+    .month-buttons{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .icon-btn{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      border:1px solid #cbd5e1;
+      background:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#7a1f1f;
+    }
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+
+    .modal-backdrop.show{display:flex}
+
+    .modal{
+      width:min(820px,100%);
+      background:#fff;
+      border-radius:16px;
+      border:1px solid var(--line);
+      box-shadow:0 24px 60px rgba(15,23,42,.18);
+      padding:20px;
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      color:var(--primary);
+    }
+
+    .modal-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-size:14px;
+      font-weight:600;
+      color:#334155;
+    }
+
+    .field{margin-top:14px}
+
+    input,select{
+      width:100%;
+      height:42px;
+      border-radius:10px;
+      border:1px solid #cbd5e1;
+      padding:0 12px;
+      outline:none;
+      background:#fff;
+    }
+
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:18px;
+    }
+
+    .hidden{display:none}
+
+    @media (max-width:1024px){
+      .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .topbar{padding:18px 20px}
+      .container{padding:20px}
+      .topbar-side{display:none}
+    }
+
+    @media (max-width:720px){
+      .stats-grid,.modal-grid{grid-template-columns:1fr}
+      .topbar h1{font-size:26px}
+      .between{flex-direction:column;align-items:stretch}
+      .actions{width:100%}
+      .btn{justify-content:center;width:100%}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-mark"></div>
+      <div>
+        <p class="eyebrow">Banco Interamericano de Desarrollo</p>
+        <h1>Actividades / Hitos</h1>
+      </div>
+    </div>
+    <div class="topbar-side">
+      <div>Cronograma editable</div>
+      <small>Vista matricial por meses</small>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-header between">
+        <div>
+          <h2>Panel de control</h2>
+          <p>Edita actividades, periodo, activa meses, agrega filas y exporta el cronograma en Excel.</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-outline" id="exportBtn">Exportar en Excel</button>
+          <button class="btn btn-primary" id="addBtn">Agregar actividad</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="mini-card">
+          <span>Total de actividades</span>
+          <strong id="statTotal">0</strong>
+        </div>
+        <div class="mini-card">
+          <span>Con meses asignados</span>
+          <strong id="statActive">0</strong>
+        </div>
+        <div class="mini-card">
+          <span>Hitos marcados</span>
+          <strong id="statMarks">0</strong>
+        </div>
+        <div class="mini-card">
+          <div class="search-wrap">
+            <span>🔎</span>
+            <input id="searchInput" placeholder="Buscar actividad o categoría">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2>Carga de actividades por mes</h2>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-grid" id="chartGrid"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="tabs">
+        <button class="tab active" data-view="cronograma">Cronograma</button>
+        <button class="tab" data-view="lista">Lista</button>
+      </div>
+    </section>
+
+    <section class="card" id="cronogramaView">
+      <div class="legend">
+        <div class="legend-item">
+          <span class="pill"></span> Meses activos
+        </div>
+      </div>
+
+      <div class="scroll-x">
+        <div class="gantt-table">
+          <div class="gantt-header">
+            <div>Componente</div>
+            <div>Actividad</div>
+            <div>Periodo</div>
+            <div class="col-months" id="headerMonths"></div>
+          </div>
+          <div id="ganttSections"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="list-grid hidden" id="listaView"></section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Nueva actividad</h3>
+        <button class="icon-btn" id="closeModal">✕</button>
+      </div>
+
+      <div class="modal-grid">
+        <div>
+          <label>Sección</label>
+          <select id="draftSection"></select>
+        </div>
+        <div>
+          <label>Subcategoría</label>
+          <input id="draftSubcategory" placeholder="Ej. Convenio / Tratado Marco">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Actividad</label>
+        <textarea id="draftTitle" placeholder="Describe la actividad o hito"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Periodo</label>
+        <input id="draftPeriod" placeholder="Ej. 4–5 o Q1">
+      </div>
+
+      <div class="field">
+        <label>Meses</label>
+        <div class="month-buttons" id="draftMonths"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="saveDraft">Guardar actividad</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+
+    const INITIAL_DATA = [
+      {
+        id: "gobernanza",
+        name: "Gobernanza",
+        items: [
+          {
+            id: "g-1",
+            subcategory: "Convenio / Tratado Marco",
+            title: "Contratar consultor abogado (Alan Thomson) para acompañamiento del BID en la estructuración técnica de la gobernanza",
+            period: "2",
+            months: [2]
+          },
+          {
+            id: "g-2",
+            subcategory: "Convenio / Tratado Marco",
+            title: "Análisis sobre si corresponde convenio o tratado marco y modelo de gobernanza para proyectos piloto",
+            period: "3",
+            months: [3]
+          },
+          {
+            id: "g-3",
+            subcategory: "Convenio / Tratado Marco",
+            title: "Preparación y socialización del borrador de convenio/tratado con comisiones y/o gobernanza para pilotos",
+            period: "4–5",
+            months: [4,5]
+          },
+          {
+            id: "g-4",
+            subcategory: "Convenio / Tratado Marco",
+            title: "Firma del borrador de convenio/tratado marco en consejo intersectorial de ministros",
+            period: "6",
+            months: [6]
+          },
+          {
+            id: "g-5",
+            subcategory: "Convenio / Tratado Marco",
+            title: "Instrumento legal borrador para la gobernanza de los pilotos (a nivel de ministros de los 2 países participantes)",
+            period: "6",
+            months: [6]
+          },
+          {
+            id: "g-6",
+            subcategory: "Unidad Ejecutora Inicial",
+            title: "Contratar 2 consultores (coordinador y apoyo técnico) dentro de SIECA temporalmente",
+            period: "7–12",
+            months: [7,8,9,10,11,12]
+          },
+          {
+            id: "g-7",
+            subcategory: "Entrada en funcionamiento de instituciones regionales nuevas",
+            title: "Diseño detallado del esquema administrativo, operativo, financiero y funcional conforme al CM y estudio técnico",
+            period: "7–12",
+            months: [7,8,9,10,11,12]
+          },
+          {
+            id: "g-8",
+            subcategory: "Entrada en funcionamiento de instituciones regionales nuevas",
+            title: "Inicio en funcionamiento",
+            period: "",
+            months: []
+          }
+        ]
+      },
+      {
+        id: "tecnicos",
+        name: "Técnicos",
+        items: [
+          {
+            id: "t-1",
+            subcategory: "Estudios de ingeniería",
+            title: "Preparación de TdR para el diseño de los proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass",
+            period: "1–2",
+            months: [1,2]
+          },
+          {
+            id: "t-2",
+            subcategory: "Estudios de ingeniería",
+            title: "Proyectos piloto (PN-CR Paso Canoas y ES-HO Amatillo) y estudio de factibilidad técnica avanzada de Cargo Pass",
+            period: "3–10",
+            months: [3,4,5,6,7,8,9,10]
+          },
+          {
+            id: "t-3",
+            subcategory: "Estudios de derivación de carga y viabilidad",
+            title: "Estudio de demanda, DAP y viabilidad de derivación de carga al CargoPass",
+            period: "2–9",
+            months: [2,3,4,5,6,7,8,9]
+          },
+          {
+            id: "t-4",
+            subcategory: "Análisis económica, financiera, riesgos y legal",
+            title: "Estudio de viabilidad financiera y económica final, análisis de riesgos, acorde a procesos y guías de programación en los países",
+            period: "9–11",
+            months: [9,10,11]
+          },
+          {
+            id: "t-5",
+            subcategory: "Estudios de tiempos de viaje",
+            title: "Estudios de tiempos de viaje de todo el corredor, incluyendo puestos de frontera",
+            period: "3–8",
+            months: [3,4,5,6,7,8]
+          },
+          {
+            id: "t-6",
+            subcategory: "Análisis del OEA para todo el corredor",
+            title: "Diagnóstico para el análisis de los programas nacionales del Operador Económico Autorizado (tipificación, alcance y acuerdos de reconocimiento mutuo)",
+            period: "2–10",
+            months: [2,3,4,5,6,7,8,9,10]
+          }
+        ]
+      },
+      {
+        id: "fondeo",
+        name: "Fondeo",
+        items: [
+          {
+            id: "f-1",
+            subcategory: "Fondo 1 de preinversión",
+            title: "Para Unidad Ejecutora inicial y para estudios de preinversión (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)",
+            period: "3–11",
+            months: [3,4,5,6,7,8,9,10,11]
+          },
+          {
+            id: "f-2",
+            subcategory: "Fondo 2 de operación para la gobernanza",
+            title: "Para Unidad Ejecutora inicial y arranque del funcionamiento de la gobernanza (CTs actuales del Banco, nuevos fondos JICA, UE, etc.)",
+            period: "",
+            months: []
+          },
+          {
+            id: "f-3",
+            subcategory: "Fondo 3 implementación",
+            title: "CCLIP del BID más un champion",
+            period: "",
+            months: []
+          }
+        ]
+      }
+    ];
+
+    const SECTION_STYLES = {
+      gobernanza: { color: "#003F72", chipClass: "chip-blue" },
+      tecnicos: { color: "#0F5B78", chipClass: "chip-teal" },
+      fondeo: { color: "#5B6B7A", chipClass: "chip-slate" }
+    };
+
+    let sections = JSON.parse(JSON.stringify(INITIAL_DATA));
+    let query = "";
+    let view = "cronograma";
+    let draft = {
+      sectionId: "gobernanza",
+      subcategory: "",
+      title: "",
+      period: "",
+      months: []
+    };
+
+    function uid() {
+      return Math.random().toString(36).slice(2, 9);
+    }
+
+    function filteredSections() {
+      const q = query.trim().toLowerCase();
+      if (!q) return sections;
+
+      return sections
+        .map(section => ({
+          ...section,
+          items: section.items.filter(item =>
+            section.name.toLowerCase().includes(q) ||
+            item.subcategory.toLowerCase().includes(q) ||
+            item.title.toLowerCase().includes(q) ||
+            (item.period || "").toLowerCase().includes(q)
+          )
+        }))
+        .filter(section => section.items.length > 0);
+    }
+
+    function stats() {
+      const all = sections.flatMap(s => s.items);
+      return {
+        total: all.length,
+        active: all.filter(i => i.months.length > 0).length,
+        marks: all.reduce((a, i) => a + i.months.length, 0)
+      };
+    }
+
+    function monthlyCounts() {
+      const counts = Array.from({ length: 12 }, (_, i) => ({ mes: i + 1, total: 0 }));
+      sections.forEach(section =>
+        section.items.forEach(item =>
+          item.months.forEach(m => counts[m - 1].total++)
+        )
+      );
+      return counts;
+    }
+
+    function toggleMonth(sectionId, itemId, month) {
+      sections = sections.map(section =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              items: section.items.map(item =>
+                item.id !== itemId
+                  ? item
+                  : {
+                      ...item,
+                      months: item.months.includes(month)
+                        ? item.months.filter(m => m !== month)
+                        : [...item.months, month].sort((a, b) => a - b)
+                    }
+              )
+            }
+      );
+      render();
+    }
+
+    function updateItem(sectionId, itemId, patch) {
+      sections = sections.map(section =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              items: section.items.map(item =>
+                item.id === itemId ? { ...item, ...patch } : item
+              )
+            }
+      );
+      render();
+    }
+
+    function deleteItem(sectionId, itemId) {
+      sections = sections.map(section =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              items: section.items.filter(item => item.id !== itemId)
+            }
+      );
+      render();
+    }
+
+    function exportExcelHtml() {
+      let html = '<table border="1"><tr><th>Sección</th><th>Subcategoría</th><th>Actividad</th><th>Periodo</th>';
+      MONTHS.forEach(m => html += `<th>Mes ${m}</th>`);
+      html += '</tr>';
+
+      sections.forEach(section => {
+        section.items.forEach(item => {
+          html += `<tr>
+            <td>${escapeHtml(section.name)}</td>
+            <td>${escapeHtml(item.subcategory)}</td>
+            <td>${escapeHtml(item.title)}</td>
+            <td>${escapeHtml(item.period || "")}</td>
+          `;
+          MONTHS.forEach(m => html += `<td>${item.months.includes(m) ? 1 : ''}</td>`);
+          html += '</tr>';
+        });
+      });
+
+      html += '</table>';
+
+      const full = `<html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
+      const blob = new Blob([full], { type: 'application/vnd.ms-excel' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'actividades_hitos.xls';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
+
+    function renderChart() {
+      const c = document.getElementById('chartGrid');
+      const data = monthlyCounts();
+      const max = Math.max(1, ...data.map(d => d.total));
+
+      c.innerHTML = data.map(d => `
+        <div class="bar-col">
+          <div class="bar-track">
+            <div class="bar-fill" style="height:${(d.total / max) * 100}%"></div>
+          </div>
+          <div class="bar-value">${d.total}</div>
+          <div class="bar-label">${d.mes}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderHeaderMonths() {
+      document.getElementById('headerMonths').innerHTML =
+        MONTHS.map(m => `<div class="month-head">${m}</div>`).join('');
+    }
+
+    function renderMonthsGrid(sectionId, item) {
+      return `
+        <div class="months-grid">
+          ${MONTHS.map(m => `
+            <button
+              class="month-btn ${item.months.includes(m) ? 'active' : ''}"
+              data-toggle="${sectionId}|${item.id}|${m}"
+            >${m}</button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderGantt() {
+      const wrap = document.getElementById('ganttSections');
+
+      wrap.innerHTML = filteredSections().map(section => {
+        const style = SECTION_STYLES[section.id];
+
+        return `
+          <div class="section-block">
+            <div class="section-title" style="background:${style.color}">
+              ${section.name}
+            </div>
+
+            <div class="section-body">
+              ${section.items.map(item => `
+                <div class="gantt-row">
+                  <div class="col-component cell">
+                    <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
+                  </div>
+
+                  <div class="col-activity cell">
+                    <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                  </div>
+
+                  <div class="col-period cell center">
+                    <input
+                      class="period-input"
+                      value="${escapeHtml(item.period || '')}"
+                      data-period="${section.id}|${item.id}"
+                      placeholder="Periodo"
+                    >
+                  </div>
+
+                  <div class="col-months cell">
+                    ${renderMonthsGrid(section.id, item)}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderList() {
+      const wrap = document.getElementById('listaView');
+
+      wrap.innerHTML = filteredSections().map(section => {
+        const style = SECTION_STYLES[section.id];
+
+        return `
+          <div class="card">
+            <div class="card-header section-header">
+              <h2>${section.name}</h2>
+            </div>
+
+            <div class="list-items">
+              ${section.items.map(item => `
+                <div class="list-item">
+                  <div class="list-main">
+                    <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
+
+                    <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+
+                    <input
+                      class="period-input"
+                      value="${escapeHtml(item.period || '')}"
+                      data-period="${section.id}|${item.id}"
+                      placeholder="Periodo"
+                    >
+
+                    <div class="month-buttons">
+                      ${MONTHS.map(m => `
+                        <button class="month-btn ${item.months.includes(m) ? 'active' : ''}" data-toggle="${section.id}|${item.id}|${m}">
+                          ${m}
+                        </button>
+                      `).join('')}
+                    </div>
+                  </div>
+
+                  <button class="icon-btn" data-delete="${section.id}|${item.id}" title="Eliminar">🗑</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStats() {
+      const s = stats();
+      document.getElementById('statTotal').textContent = s.total;
+      document.getElementById('statActive').textContent = s.active;
+      document.getElementById('statMarks').textContent = s.marks;
+    }
+
+    function renderTabs() {
+      document.querySelectorAll('.tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+      });
+
+      document.getElementById('cronogramaView').classList.toggle('hidden', view !== 'cronograma');
+      document.getElementById('listaView').classList.toggle('hidden', view !== 'lista');
+    }
+
+    function renderDraftMonths() {
+      document.getElementById('draftMonths').innerHTML = MONTHS.map(m => `
+        <button class="month-btn ${draft.months.includes(m) ? 'active' : ''}" data-draft-month="${m}">
+          ${m}
+        </button>
+      `).join('');
+    }
+
+    function renderDraftSections() {
+      document.getElementById('draftSection').innerHTML = sections.map(s => `
+        <option value="${s.id}" ${s.id === draft.sectionId ? 'selected' : ''}>
+          ${escapeHtml(s.name)}
+        </option>
+      `).join('');
+    }
+
+    function bindEvents() {
+      document.querySelectorAll('[data-toggle]').forEach(el => {
+        el.onclick = () => {
+          const [sectionId, itemId, month] = el.dataset.toggle.split('|');
+          toggleMonth(sectionId, itemId, Number(month));
+        };
+      });
+
+      document.querySelectorAll('[data-delete]').forEach(el => {
+        el.onclick = () => {
+          const [sectionId, itemId] = el.dataset.delete.split('|');
+          deleteItem(sectionId, itemId);
+        };
+      });
+
+      document.querySelectorAll('textarea[data-title]').forEach(el => {
+        el.onchange = () => {
+          const [sectionId, itemId] = el.dataset.title.split('|');
+          updateItem(sectionId, itemId, { title: el.value });
+        };
+      });
+
+      document.querySelectorAll('[data-period]').forEach(el => {
+        el.onchange = () => {
+          const [sectionId, itemId] = el.dataset.period.split('|');
+          updateItem(sectionId, itemId, { period: el.value });
+        };
+      });
+
+      document.querySelectorAll('[data-draft-month]').forEach(el => {
+        el.onclick = () => {
+          const m = Number(el.dataset.draftMonth);
+          draft.months = draft.months.includes(m)
+            ? draft.months.filter(x => x !== m)
+            : [...draft.months, m].sort((a, b) => a - b);
+          renderDraftMonths();
+        };
+      });
+    }
+
+    function render() {
+      renderStats();
+      renderChart();
+      renderHeaderMonths();
+      renderGantt();
+      renderList();
+      renderTabs();
+      renderDraftSections();
+      renderDraftMonths();
+      bindEvents();
+    }
+
+    document.getElementById('searchInput').oninput = e => {
+      query = e.target.value;
+      render();
+    };
+
+    document.getElementById('exportBtn').onclick = exportExcelHtml;
+
+    document.getElementById('addBtn').onclick = () => {
+      document.getElementById('modalBackdrop').classList.add('show');
+    };
+
+    document.getElementById('closeModal').onclick = () => {
+      document.getElementById('modalBackdrop').classList.remove('show');
+    };
+
+    document.getElementById('modalBackdrop').onclick = e => {
+      if (e.target.id === 'modalBackdrop') {
+        e.currentTarget.classList.remove('show');
+      }
+    };
+
+    document.getElementById('draftSection').onchange = e => {
+      draft.sectionId = e.target.value;
+    };
+
+    document.getElementById('draftSubcategory').oninput = e => {
+      draft.subcategory = e.target.value;
+    };
+
+    document.getElementById('draftTitle').oninput = e => {
+      draft.title = e.target.value;
+    };
+
+    document.getElementById('draftPeriod').oninput = e => {
+      draft.period = e.target.value;
+    };
+
+    document.getElementById('saveDraft').onclick = () => {
+      if (!draft.subcategory.trim() || !draft.title.trim()) return;
+
+      sections = sections.map(section =>
+        section.id !== draft.sectionId
+          ? section
+          : {
+              ...section,
+              items: [
+                ...section.items,
+                {
+                  id: uid(),
+                  subcategory: draft.subcategory,
+                  title: draft.title,
+                  period: draft.period,
+                  months: [...draft.months]
+                }
+              ]
+            }
+      );
+
+      draft = {
+        sectionId: draft.sectionId,
+        subcategory: "",
+        title: "",
+        period: "",
+        months: []
+      };
+
+      document.getElementById('draftSubcategory').value = '';
+      document.getElementById('draftTitle').value = '';
+      document.getElementById('draftPeriod').value = '';
+      document.getElementById('modalBackdrop').classList.remove('show');
+      render();
+    };
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.onclick = () => {
+        view = btn.dataset.view;
+        renderTabs();
+      };
+    });
+
+    render();
+  </script>
+</body>
+</html>
