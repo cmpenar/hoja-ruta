@@ -293,7 +293,19 @@
       padding:12px 16px;
       display:inline-flex;
       align-items:center;
-      gap:8px;
+      gap:10px;
+    }
+
+    .section-chevron{
+      border:0;
+      background:transparent;
+      color:#fff;
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+      padding:0;
+      width:18px;
+      text-align:center;
     }
 
     .section-meta{
@@ -313,16 +325,6 @@
       padding:6px 10px;
     }
 
-    .section-toggle{
-      border:1px solid #cbd5e1;
-      background:#fff;
-      color:#003f72;
-      border-radius:10px;
-      padding:8px 12px;
-      font-weight:600;
-      cursor:pointer;
-    }
-
     .section-body{
       border:1px solid var(--line);
       border-radius:12px;
@@ -334,11 +336,28 @@
       display:none;
     }
 
+    .subsection-block{
+      border-top:1px solid var(--line-soft);
+    }
+
+    .subsection-block:first-child{
+      border-top:0;
+    }
+
+    .subsection-title{
+      background:#f7fafc;
+      color:#24455e;
+      font-weight:700;
+      font-size:14px;
+      padding:12px 16px;
+      border-bottom:1px solid var(--line-soft);
+    }
+
     .data-row{
       border-bottom:1px solid var(--line-soft);
     }
 
-    .data-row:last-child{
+    .subsection-block .data-row:last-child{
       border-bottom:0;
     }
 
@@ -367,6 +386,7 @@
 
     .activity-wrap .chip{
       margin-bottom:8px;
+      display:inline-block;
     }
 
     .col-activity textarea,
@@ -833,6 +853,19 @@
       return min === max ? `${min}` : `${min}-${max}`;
     }
 
+    function groupBySubcategory(items) {
+      const groups = [];
+      items.forEach(item => {
+        let found = groups.find(g => g.name === item.subcategory);
+        if (!found) {
+          found = { name: item.subcategory, items: [] };
+          groups.push(found);
+        }
+        found.items.push(item);
+      });
+      return groups;
+    }
+
     function updateItem(sectionId, itemId, patch) {
       sections = sections.map(section =>
         section.id !== sectionId
@@ -924,55 +957,60 @@
         const style = SECTION_STYLES[section.id];
         const duration = getSectionDuration(section);
         const isCollapsed = !!collapsedSections[section.id];
+        const groups = groupBySubcategory(section.items);
 
         return `
           <div class="section-block">
             <div class="section-header-bar">
               <div class="section-title-wrap">
                 <div class="section-title" style="background:${style.color}">
-                  ${escapeHtml(section.name)}
+                  <button class="section-chevron" data-toggle-section="${section.id}" title="Expandir o contraer">
+                    ${isCollapsed ? '▸' : '▾'}
+                  </button>
+                  <span>${escapeHtml(section.name)}</span>
                 </div>
                 <div class="section-meta">
                   <span class="section-duration">Duración total: ${duration}</span>
                 </div>
               </div>
-
-              <button class="section-toggle" data-toggle-section="${section.id}">
-                ${isCollapsed ? 'Expandir' : 'Contraer'}
-              </button>
             </div>
 
             <div class="section-body ${isCollapsed ? 'collapsed' : ''}">
-              ${section.items.map(item => {
-                const monthInputs = inputsFromMonths(item.months);
+              ${groups.map(group => `
+                <div class="subsection-block">
+                  <div class="subsection-title">${escapeHtml(group.name)}</div>
 
-                return `
-                  <div class="data-row">
-                    <div class="cell left col-activity">
-                      <div class="activity-wrap">
-                        <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory)}</span>
-                        <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                  ${group.items.map(item => {
+                    const monthInputs = inputsFromMonths(item.months);
+
+                    return `
+                      <div class="data-row">
+                        <div class="cell left col-activity">
+                          <div class="activity-wrap">
+                            <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                          </div>
+                        </div>
+
+                        <div class="cell">
+                          <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="2-5 o 2">
+                        </div>
+
+                        ${monthInputs.map((value, idx) => `
+                          <div class="cell">
+                            <input
+                              class="month-input ${value ? 'active' : ''}"
+                              data-month="${section.id}|${item.id}|${idx + 1}"
+                              value=""
+                              placeholder=""
+                              readonly
+                            >
+                          </div>
+                        `).join("")}
                       </div>
-                    </div>
-
-                    <div class="cell">
-                      <input class="small-input" data-period="${section.id}|${item.id}" value="${escapeHtml(item.period || "")}" placeholder="2-5 o 2">
-                    </div>
-
-                    ${monthInputs.map((value, idx) => `
-                      <div class="cell">
-                        <input
-                          class="month-input ${value ? 'active' : ''}"
-                          data-month="${section.id}|${item.id}|${idx + 1}"
-                          value=""
-                          placeholder=""
-                          readonly
-                        >
-                      </div>
-                    `).join("")}
-                  </div>
-                `;
-              }).join("")}
+                    `;
+                  }).join("")}
+                </div>
+              `).join("")}
             </div>
           </div>
         `;
