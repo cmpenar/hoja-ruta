@@ -6,41 +6,64 @@
   <title>Actividades / Hitos</title>
   <style>
     :root{
-      --bg:#f4f7f9;
-      --card:#fff;
+      --bg:#eef3f7;
+      --card:#ffffff;
       --line:#d8e1e8;
-      --line-soft:#e7edf2;
+      --line-soft:#e8eef3;
       --text:#1f2a37;
       --muted:#5b6b7a;
       --primary:#003f72;
       --primary-2:#00345e;
       --danger:#b42318;
-      --danger-2:#912018;
-      --shadow:0 6px 20px rgba(16,24,40,.06);
+      --danger-2:#8f1d14;
+      --ok:#067647;
+      --warn:#b54708;
+      --shadow:0 8px 24px rgba(16,24,40,.08);
       --subheader-bg:#dfe8ef;
       --subheader-text:#314b5f;
       --subheader-border:#c7d4df;
+
+      --font-base: clamp(14px, 0.82vw, 17px);
+      --font-small: clamp(12px, 0.72vw, 14px);
+      --font-title: clamp(28px, 2vw, 38px);
+
+      --row-activity: 500px;
+      --row-period: 120px;
+      --row-month: 64px;
+      --row-action: 84px;
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
 
-    body{
+    html, body{
       margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+      padding:0;
       background:var(--bg);
       color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+      font-size:var(--font-base);
     }
 
-    button,input,textarea,select{font:inherit}
+    button, input, textarea, select{
+      font:inherit;
+    }
+
+    body{
+      min-height:100vh;
+    }
 
     .topbar{
+      position:sticky;
+      top:0;
+      z-index:30;
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:24px;
-      padding:20px 32px;
+      padding:18px 24px;
       background:#fff;
       border-bottom:1px solid var(--line);
+      box-shadow:0 2px 10px rgba(16,24,40,.03);
     }
 
     .topbar-inner{
@@ -50,66 +73,76 @@
     }
 
     .brand-mark{
-      width:6px;
-      height:44px;
+      width:8px;
+      height:52px;
       border-radius:999px;
       background:var(--primary);
+      flex:0 0 auto;
     }
 
     .eyebrow{
       margin:0 0 4px;
       font-size:12px;
-      letter-spacing:.18em;
+      letter-spacing:.16em;
       text-transform:uppercase;
       color:var(--muted);
-      font-weight:700;
+      font-weight:800;
     }
 
     .topbar h1{
       margin:0;
       color:var(--primary);
-      font-size:32px;
-      line-height:1.1;
+      font-size:var(--font-title);
+      line-height:1.05;
     }
 
     .topbar-side{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
       text-align:right;
       color:var(--muted);
-      font-size:14px;
+      font-size:13px;
     }
 
-    .topbar-side small{
-      display:block;
-      margin-top:4px;
-      color:#7b8794;
+    .sync-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid #d8e1e8;
+      background:#f8fafc;
+      font-weight:700;
+      color:#334155;
     }
+
+    .sync-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:#98a2b3;
+    }
+
+    .sync-pill.online .sync-dot{ background:var(--ok); }
+    .sync-pill.saving .sync-dot{ background:var(--warn); }
+    .sync-pill.error .sync-dot{ background:var(--danger); }
 
     .container{
-      max-width:1440px;
+      width:min(1960px, calc(100vw - 20px));
       margin:0 auto;
-      padding:24px 32px 40px;
+      padding:18px 10px 28px;
       display:grid;
-      gap:24px;
+      gap:18px;
     }
 
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:16px;
+      border-radius:18px;
       box-shadow:var(--shadow);
-    }
-
-    .card-header{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:20px 20px 12px;
-    }
-
-    .card-header h2{
-      margin:0;
-      color:var(--primary);
-      font-size:20px;
+      overflow:hidden;
     }
 
     .toolbar{
@@ -117,7 +150,7 @@
       justify-content:space-between;
       align-items:center;
       gap:16px;
-      padding:16px 20px;
+      padding:16px 18px;
       flex-wrap:wrap;
     }
 
@@ -128,11 +161,11 @@
     }
 
     .toolbar-search{
-      width:min(420px,100%);
+      width:min(420px, 100%);
       border:1px solid var(--line);
       border-radius:12px;
       background:#fff;
-      padding:12px 14px;
+      padding:10px 14px;
       display:flex;
       align-items:center;
       gap:10px;
@@ -149,12 +182,19 @@
     .btn{
       display:inline-flex;
       align-items:center;
+      justify-content:center;
       gap:8px;
       padding:10px 14px;
-      border-radius:10px;
+      border-radius:12px;
       border:1px solid transparent;
       cursor:pointer;
-      font-weight:600;
+      font-weight:700;
+      transition:.15s ease;
+      white-space:nowrap;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
     }
 
     .btn-primary{
@@ -181,8 +221,28 @@
       background:var(--danger-2);
     }
 
+    .note{
+      padding:0 18px 16px;
+      color:#64748b;
+      font-size:13px;
+    }
+
+    .card-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:18px 18px 8px;
+    }
+
+    .card-header h2{
+      margin:0;
+      color:var(--primary);
+      font-size:20px;
+    }
+
     .chart-wrap{
-      padding:0 20px 20px;
+      padding:0 18px 18px;
     }
 
     .chart-grid{
@@ -204,7 +264,7 @@
     .bar-track{
       width:100%;
       height:200px;
-      border-radius:10px;
+      border-radius:12px;
       background:linear-gradient(to top,#eef3f7,#f8fafc);
       border:1px solid #e5edf3;
       display:flex;
@@ -220,7 +280,7 @@
 
     .bar-value{
       font-size:12px;
-      font-weight:700;
+      font-weight:800;
       color:var(--primary);
     }
 
@@ -232,32 +292,35 @@
     }
 
     .scroll-x{
-      overflow-x:auto;
-      padding:20px;
+      overflow:auto;
+      padding:16px;
     }
 
     .table-wrap{
-      min-width:1350px;
+      min-width:calc(var(--row-activity) + var(--row-period) + (12 * var(--row-month)) + var(--row-action));
     }
 
     .header-row,
     .data-row{
       display:grid;
-      grid-template-columns:420px 140px repeat(12,70px) 90px;
+      grid-template-columns: var(--row-activity) var(--row-period) repeat(12, var(--row-month)) var(--row-action);
     }
 
     .header-row{
+      position:sticky;
+      top:84px;
+      z-index:10;
       background:#f8fafc;
       border:1px solid var(--line);
-      border-radius:12px;
+      border-radius:14px;
       overflow:hidden;
       font-size:14px;
-      font-weight:700;
+      font-weight:800;
       color:#52606d;
     }
 
     .header-row > div{
-      padding:14px 12px;
+      padding:14px 10px;
       border-right:1px solid var(--line);
       text-align:center;
     }
@@ -273,7 +336,7 @@
     }
 
     .section-block{
-      margin-top:18px;
+      margin-top:16px;
     }
 
     .section-header-bar{
@@ -293,24 +356,31 @@
 
     .section-title{
       color:#fff;
-      font-weight:700;
-      border-radius:12px;
+      font-weight:800;
+      border-radius:14px;
       padding:12px 16px;
       display:inline-flex;
       align-items:center;
       gap:10px;
     }
 
-    .section-chevron{
+    .section-chevron,
+    .subsection-chevron{
       border:0;
       background:transparent;
-      color:#fff;
-      font-size:16px;
-      line-height:1;
       cursor:pointer;
+      font-size:16px;
+      width:20px;
       padding:0;
-      width:18px;
-      text-align:center;
+      line-height:1;
+    }
+
+    .section-chevron{
+      color:#fff;
+    }
+
+    .subsection-chevron{
+      color:var(--subheader-text);
     }
 
     .section-meta{
@@ -320,7 +390,7 @@
       flex-wrap:wrap;
       font-size:13px;
       color:#486170;
-      font-weight:600;
+      font-weight:700;
     }
 
     .section-duration{
@@ -333,12 +403,13 @@
 
     .section-body{
       border:1px solid var(--line);
-      border-radius:12px;
+      border-radius:14px;
       overflow:hidden;
       background:#fff;
     }
 
-    .section-body.collapsed{
+    .section-body.collapsed,
+    .subsection-body.collapsed{
       display:none;
     }
 
@@ -357,7 +428,7 @@
       gap:12px;
       background:var(--subheader-bg);
       color:var(--subheader-text);
-      font-weight:700;
+      font-weight:800;
       font-size:14px;
       padding:12px 16px;
       border-bottom:1px solid var(--subheader-border);
@@ -371,24 +442,8 @@
     }
 
     .subsection-title{
-      font-weight:800;
+      font-weight:900;
       letter-spacing:.01em;
-    }
-
-    .subsection-chevron{
-      border:0;
-      background:transparent;
-      color:var(--subheader-text);
-      font-size:15px;
-      line-height:1;
-      cursor:pointer;
-      padding:0;
-      width:18px;
-      text-align:center;
-    }
-
-    .subsection-body.collapsed{
-      display:none;
     }
 
     .duration-bar-wrap{
@@ -399,7 +454,7 @@
     }
 
     .duration-bar-track{
-      width:140px;
+      width:150px;
       height:10px;
       border-radius:999px;
       background:#e8eef3;
@@ -422,13 +477,14 @@
 
     .duration-bar-label{
       font-size:12px;
-      font-weight:700;
+      font-weight:800;
       color:#486170;
       white-space:nowrap;
     }
 
     .data-row{
       border-bottom:1px solid var(--line-soft);
+      background:#fff;
     }
 
     .subsection-body .data-row:last-child{
@@ -436,7 +492,7 @@
     }
 
     .cell{
-      padding:14px 12px;
+      padding:12px 10px;
       border-right:1px solid var(--line-soft);
       display:flex;
       align-items:center;
@@ -446,8 +502,7 @@
     .cell.left{
       justify-content:flex-start;
       align-items:flex-start;
-      padding:14px 16px;
-      gap:10px;
+      padding:12px 14px;
     }
 
     .cell:last-child{
@@ -461,62 +516,14 @@
       gap:8px;
     }
 
-    .activity-wrap .chip{
-      display:inline-block;
-      width:max-content;
-    }
-
-    .col-activity textarea,
-    .field textarea{
-      width:100%;
-      min-height:84px;
-      border:1px solid #d6dee5;
-      border-radius:10px;
-      background:#fbfdfe;
-      padding:12px;
-      resize:vertical;
-      outline:none;
-    }
-
-    .small-input{
-      width:100%;
-      height:42px;
-      border:1px solid #d6dee5;
-      border-radius:10px;
-      background:#fbfdfe;
-      padding:0 12px;
-      text-align:center;
-      font-weight:600;
-      color:#486170;
-      outline:none;
-    }
-
-    .month-input{
-      width:54px;
-      height:40px;
-      border:1px solid #cbd5e1;
-      border-radius:10px;
-      background:#fff;
-      text-align:center;
-      font-weight:600;
-      color:#334155;
-      outline:none;
-      cursor:pointer;
-    }
-
-    .month-input.active{
-      background:#003f72;
-      color:#fff;
-      border-color:#003f72;
-    }
-
     .chip{
       display:inline-block;
+      width:max-content;
       padding:6px 10px;
       border-radius:999px;
       border:1px solid;
       font-size:12px;
-      font-weight:700;
+      font-weight:800;
       line-height:1.3;
     }
 
@@ -538,29 +545,63 @@
       border-color:#cbd5e1;
     }
 
-    .icon-btn{
-      width:36px;
-      height:36px;
-      border-radius:10px;
+    textarea.activity-input,
+    .field textarea{
+      width:100%;
+      min-height:92px;
+      border:1px solid #d6dee5;
+      border-radius:12px;
+      background:#fbfdfe;
+      padding:12px;
+      resize:vertical;
+      outline:none;
+      line-height:1.35;
+      font-size:14px;
+    }
+
+    .small-input{
+      width:100%;
+      height:44px;
+      border:1px solid #d6dee5;
+      border-radius:12px;
+      background:#fbfdfe;
+      padding:0 10px;
+      text-align:center;
+      font-weight:800;
+      color:#486170;
+      outline:none;
+    }
+
+    .month-input{
+      width:52px;
+      height:42px;
       border:1px solid #cbd5e1;
+      border-radius:12px;
       background:#fff;
+      text-align:center;
+      font-weight:800;
+      color:#334155;
+      outline:none;
       cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      color:#7a1f1f;
+      user-select:none;
+    }
+
+    .month-input.active{
+      background:#003f72;
+      color:#fff;
+      border-color:#003f72;
     }
 
     .delete-btn{
       width:42px;
       height:42px;
-      border-radius:10px;
+      border-radius:12px;
       border:1px solid #efc3c0;
       background:#fff5f5;
       color:#b42318;
       cursor:pointer;
       font-size:18px;
-      font-weight:700;
+      font-weight:800;
     }
 
     .delete-btn:hover{
@@ -575,7 +616,7 @@
       align-items:center;
       justify-content:center;
       padding:20px;
-      z-index:50;
+      z-index:60;
     }
 
     .modal-backdrop.show{
@@ -583,9 +624,9 @@
     }
 
     .modal{
-      width:min(900px,100%);
+      width:min(980px,100%);
       background:#fff;
-      border-radius:16px;
+      border-radius:18px;
       border:1px solid var(--line);
       box-shadow:0 24px 60px rgba(15,23,42,.18);
       padding:20px;
@@ -601,6 +642,21 @@
     .modal-head h3{
       margin:0;
       color:var(--primary);
+      font-size:22px;
+    }
+
+    .icon-btn{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      border:1px solid #cbd5e1;
+      background:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#7a1f1f;
+      font-size:18px;
     }
 
     .modal-grid{
@@ -613,7 +669,7 @@
       display:block;
       margin-bottom:8px;
       font-size:14px;
-      font-weight:600;
+      font-weight:700;
       color:#334155;
     }
 
@@ -621,20 +677,14 @@
       margin-top:14px;
     }
 
-    input,select{
+    input, select{
       width:100%;
-      height:42px;
-      border-radius:10px;
+      height:44px;
+      border-radius:12px;
       border:1px solid #cbd5e1;
       padding:0 12px;
       outline:none;
       background:#fff;
-    }
-
-    .modal-actions{
-      display:flex;
-      justify-content:flex-end;
-      margin-top:18px;
     }
 
     .month-edit-grid{
@@ -643,24 +693,58 @@
       gap:8px;
     }
 
-    .status-note{
-      padding:0 20px 16px;
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:18px;
+      gap:10px;
+    }
+
+    .empty-state{
+      padding:28px;
+      text-align:center;
       color:#64748b;
-      font-size:13px;
+      font-weight:600;
     }
 
-    @media (max-width:1024px){
-      .topbar{ padding:18px 20px; }
-      .container{ padding:20px; }
-      .topbar-side{ display:none; }
+    @media (max-width: 1280px){
+      :root{
+        --row-activity: 430px;
+        --row-month: 60px;
+      }
     }
 
-    @media (max-width:720px){
-      .modal-grid{ grid-template-columns:1fr; }
-      .topbar h1{ font-size:26px; }
-      .toolbar{ flex-direction:column; align-items:stretch; }
-      .toolbar-actions{ width:100%; }
-      .btn{ justify-content:center; width:100%; }
+    @media (max-width: 920px){
+      .topbar{
+        padding:16px;
+        align-items:flex-start;
+      }
+
+      .topbar-side{
+        display:none;
+      }
+
+      .container{
+        width:calc(100vw - 12px);
+        padding:12px 6px 20px;
+      }
+
+      .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      .toolbar-actions{
+        width:100%;
+      }
+
+      .btn{
+        width:100%;
+      }
+
+      .modal-grid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -673,9 +757,13 @@
         <h1>Actividades / Hitos</h1>
       </div>
     </div>
+
     <div class="topbar-side">
-      <div>Cronograma editable</div>
-      <small>Edición en línea y eliminación activa</small>
+      <div class="sync-pill" id="syncPill">
+        <span class="sync-dot"></span>
+        <span id="syncText">Conectando…</span>
+      </div>
+      <small id="lastEditorText">Sin cambios remotos aún</small>
     </div>
   </header>
 
@@ -684,18 +772,17 @@
       <div class="toolbar">
         <div class="toolbar-actions">
           <button class="btn btn-outline" id="exportBtn">Exportar</button>
-          <button class="btn btn-primary" id="saveBtn">Guardar</button>
           <button class="btn btn-primary" id="addBtn">Agregar actividad</button>
           <button class="btn btn-danger" id="resetBtn">Restablecer datos base</button>
         </div>
 
         <div class="toolbar-search">
           <span>🔎</span>
-          <input id="searchInput" placeholder="Buscar actividad o categoría">
+          <input id="searchInput" placeholder="Buscar actividad, sección o categoría">
         </div>
       </div>
-      <div class="status-note">
-        Los cambios se reflejan en pantalla inmediatamente. Para conservarlos al recargar, usa “Guardar”.
+      <div class="note">
+        Edición colaborativa en tiempo real. Todo cambio se sincroniza automáticamente para las personas que tengan abierta esta misma página con la misma base Firebase.
       </div>
     </section>
 
@@ -768,18 +855,50 @@
       </div>
 
       <div class="modal-actions">
+        <button class="btn btn-outline" id="cancelDraft">Cancelar</button>
         <button class="btn btn-primary" id="saveDraft">Guardar actividad</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const PASSWORD = "RUTA2026";
-    const STORAGE_KEY = "actividades_hitos_data";
-    const STORAGE_VERSION_KEY = "actividades_hitos_data_version";
-    const DATA_VERSION = "2026-03-24-v2";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      onSnapshot,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    let hasUnsavedChanges = false;
+    /*
+      1) Crea un proyecto en Firebase
+      2) Activa Firestore Database
+      3) Pega aquí tu configuración
+      4) Comparte este mismo HTML con la misma config
+    */
+    const firebaseConfig = {
+      apiKey: "PEGA_AQUI_TU_API_KEY",
+      authDomain: "PEGA_AQUI_TU_AUTH_DOMAIN",
+      projectId: "PEGA_AQUI_TU_PROJECT_ID",
+      storageBucket: "PEGA_AQUI_TU_STORAGE_BUCKET",
+      messagingSenderId: "PEGA_AQUI_TU_MESSAGING_SENDER_ID",
+      appId: "PEGA_AQUI_TU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const SHARED_DOC_PATH = ["cronogramas", "actividades_hitos_compartido"];
+    const sharedDocRef = doc(db, ...SHARED_DOC_PATH);
+
+    const CURRENT_USER =
+      localStorage.getItem("ah_user_name") ||
+      prompt("Escribe tu nombre para mostrar quién hizo cambios:") ||
+      "Usuario";
+
+    localStorage.setItem("ah_user_name", CURRENT_USER);
 
     const INITIAL_DATA = [
       {
@@ -913,7 +1032,7 @@
       fondeo: { color: "#5B6B7A", chipClass: "chip-slate" }
     };
 
-    let sections = loadData();
+    let sections = [];
     let query = "";
     let collapsedSections = {};
     let collapsedSubsections = {};
@@ -925,48 +1044,16 @@
       months: Array(12).fill("")
     };
 
+    let suppressRemoteRender = false;
+    let saveTimer = null;
+    let initialized = false;
+
     function deepCopy(data) {
       return JSON.parse(JSON.stringify(data));
     }
 
-    function sanitizeData(data) {
-      return data.map(section => ({
-        ...section,
-        items: (section.items || []).filter(item => {
-          const title = String(item.title || "").trim();
-          const subcategory = String(item.subcategory || "").trim();
-          const period = String(item.period || "").trim();
-          const months = Array.isArray(item.months) ? item.months.filter(m => m >= 1 && m <= 12) : [];
-          return title || subcategory || period || months.length;
-        }).map(item => ({
-          ...item,
-          id: item.id || uid(),
-          subcategory: String(item.subcategory || "").trim(),
-          title: String(item.title || "").trim(),
-          period: normalizePeriod(String(item.period || "").trim()),
-          months: normalizeMonths(item.months || parsePeriodToMonths(item.period || ""))
-        }))
-      }));
-    }
-
-    function loadData() {
-      try {
-        const savedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
-        const saved = localStorage.getItem(STORAGE_KEY);
-
-        if (saved && savedVersion === DATA_VERSION) {
-          return sanitizeData(JSON.parse(saved));
-        }
-
-        localStorage.setItem(STORAGE_VERSION_KEY, DATA_VERSION);
-        return sanitizeData(deepCopy(INITIAL_DATA));
-      } catch {
-        return sanitizeData(deepCopy(INITIAL_DATA));
-      }
-    }
-
     function uid() {
-      return Math.random().toString(36).slice(2, 9);
+      return Math.random().toString(36).slice(2, 10);
     }
 
     function normalizeMonths(months) {
@@ -974,8 +1061,7 @@
     }
 
     function normalizePeriod(period) {
-      const p = String(period || "").trim().replace(/–/g, "-").replace(/\s+/g, "");
-      return p;
+      return String(period || "").trim().replace(/–/g, "-").replace(/\s+/g, "");
     }
 
     function parsePeriodToMonths(period) {
@@ -1033,6 +1119,51 @@
         .replaceAll('"', "&quot;");
     }
 
+    function sanitizeData(data) {
+      return (data || []).map(section => ({
+        id: section.id || uid(),
+        name: String(section.name || "").trim(),
+        items: (section.items || [])
+          .filter(item => {
+            const title = String(item.title || "").trim();
+            const subcategory = String(item.subcategory || "").trim();
+            const period = String(item.period || "").trim();
+            const months = Array.isArray(item.months) ? item.months.filter(m => m >= 1 && m <= 12) : [];
+            return title || subcategory || period || months.length;
+          })
+          .map(item => {
+            let period = normalizePeriod(item.period || "");
+            let months = normalizeMonths(item.months || []);
+            if (period && !months.length) months = parsePeriodToMonths(period);
+            if (!period && months.length) period = periodFromMonths(months);
+
+            return {
+              id: item.id || uid(),
+              subcategory: String(item.subcategory || "").trim(),
+              title: String(item.title || "").trim(),
+              period,
+              months
+            };
+          })
+      }));
+    }
+
+    function setSyncState(state, text) {
+      const pill = document.getElementById("syncPill");
+      const txt = document.getElementById("syncText");
+      pill.classList.remove("online", "saving", "error");
+      pill.classList.add(state);
+      txt.textContent = text;
+    }
+
+    function updateLastEditor(meta = {}) {
+      const el = document.getElementById("lastEditorText");
+      const editor = meta.lastEditedBy || "Sin datos";
+      const ts = meta.lastEditedAt?.toDate ? meta.lastEditedAt.toDate() : null;
+      const when = ts ? ts.toLocaleString("es-CO") : "sin fecha";
+      el.textContent = `Último cambio: ${editor} · ${when}`;
+    }
+
     function filteredSections() {
       const q = query.trim().toLowerCase();
       if (!q) return sections;
@@ -1042,8 +1173,8 @@
           ...section,
           items: section.items.filter(item =>
             section.name.toLowerCase().includes(q) ||
-            item.subcategory.toLowerCase().includes(q) ||
-            item.title.toLowerCase().includes(q) ||
+            (item.subcategory || "").toLowerCase().includes(q) ||
+            (item.title || "").toLowerCase().includes(q) ||
             (item.period || "").toLowerCase().includes(q)
           )
         }))
@@ -1064,14 +1195,6 @@
       const clean = normalizeMonths(months || []);
       if (!clean.length) return null;
       return { min: Math.min(...clean), max: Math.max(...clean) };
-    }
-
-    function getSectionDuration(section) {
-      const allMonths = section.items.flatMap(item => item.months || []);
-      if (!allMonths.length) return "Sin periodo";
-      const min = Math.min(...allMonths);
-      const max = Math.max(...allMonths);
-      return min === max ? `${min}` : `${min}-${max}`;
     }
 
     function groupBySubcategory(items) {
@@ -1113,110 +1236,6 @@
       `;
     }
 
-    function markDirty() {
-      hasUnsavedChanges = true;
-    }
-
-    function updateItem(sectionId, itemId, patch, rerender = true) {
-      sections = sections.map(section =>
-        section.id !== sectionId
-          ? section
-          : {
-              ...section,
-              items: section.items.map(item =>
-                item.id === itemId
-                  ? {
-                      ...item,
-                      ...patch,
-                      months: patch.months ? normalizeMonths(patch.months) : normalizeMonths(item.months),
-                      period: patch.period !== undefined ? String(patch.period) : item.period
-                    }
-                  : item
-              )
-            }
-      );
-
-      markDirty();
-      if (rerender) render();
-    }
-
-    function deleteItem(sectionId, itemId) {
-      const ok = confirm("¿Eliminar esta actividad?");
-      if (!ok) return;
-
-      sections = sections.map(section =>
-        section.id !== sectionId
-          ? section
-          : {
-              ...section,
-              items: section.items.filter(item => item.id !== itemId)
-            }
-      );
-
-      markDirty();
-      render();
-    }
-
-    function saveChanges() {
-      const ok = confirm("¿Quieres guardar los cambios?");
-      if (!ok) return;
-
-      const pwd = prompt("Ingresa la contraseña para guardar:");
-      if (pwd !== PASSWORD) {
-        alert("Contraseña incorrecta.");
-        return;
-      }
-
-      const clean = sanitizeData(sections);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(clean));
-      localStorage.setItem(STORAGE_VERSION_KEY, DATA_VERSION);
-      sections = clean;
-      hasUnsavedChanges = false;
-      alert("Cambios guardados.");
-    }
-
-    function resetData() {
-      const ok = confirm("Esto restablecerá los datos base cargados en el código. ¿Continuar?");
-      if (!ok) return;
-
-      sections = sanitizeData(deepCopy(INITIAL_DATA));
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.setItem(STORAGE_VERSION_KEY, DATA_VERSION);
-      hasUnsavedChanges = true;
-      render();
-    }
-
-    function exportExcelHtml() {
-      let html = '<table border="1"><tr><th>Sección</th><th>Subcategoría</th><th>Actividad</th><th>Periodo</th>';
-      for (let i = 1; i <= 12; i++) html += `<th>Mes ${i}</th>`;
-      html += '</tr>';
-
-      sections.forEach(section => {
-        section.items.forEach(item => {
-          html += `<tr>
-            <td>${escapeHtml(section.name)}</td>
-            <td>${escapeHtml(item.subcategory)}</td>
-            <td>${escapeHtml(item.title)}</td>
-            <td>${escapeHtml(item.period || "")}</td>
-          `;
-          for (let i = 1; i <= 12; i++) {
-            html += `<td>${item.months.includes(i) ? 1 : ''}</td>`;
-          }
-          html += '</tr>';
-        });
-      });
-
-      html += '</table>';
-
-      const full = `<html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
-      const blob = new Blob([full], { type: "application/vnd.ms-excel" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "actividades_hitos.xls";
-      a.click();
-      URL.revokeObjectURL(a.href);
-    }
-
     function renderChart() {
       const c = document.getElementById("chartGrid");
       const data = monthlyCounts();
@@ -1233,10 +1252,35 @@
       `).join("");
     }
 
+    function renderDraftSections() {
+      document.getElementById("draftSection").innerHTML = sections.map(s => `
+        <option value="${s.id}" ${s.id === draft.sectionId ? "selected" : ""}>
+          ${escapeHtml(s.name)}
+        </option>
+      `).join("");
+    }
+
+    function renderDraftMonths() {
+      document.getElementById("draftMonths").innerHTML = Array.from({ length: 12 }, (_, i) => `
+        <input
+          class="month-input ${draft.months[i] ? "active" : ""}"
+          data-draft-month="${i}"
+          value="${draft.months[i] ? "●" : i + 1}"
+          readonly
+        >
+      `).join("");
+    }
+
     function renderTable() {
       const wrap = document.getElementById("tableSections");
+      const data = filteredSections();
 
-      wrap.innerHTML = filteredSections().map(section => {
+      if (!data.length) {
+        wrap.innerHTML = `<div class="empty-state">No hay resultados para la búsqueda.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = data.map(section => {
         const style = SECTION_STYLES[section.id] || { color: "#003F72", chipClass: "chip-blue" };
         const isCollapsed = !!collapsedSections[section.id];
         const groups = groupBySubcategory(section.items);
@@ -1246,7 +1290,7 @@
             <div class="section-header-bar">
               <div class="section-title-wrap">
                 <div class="section-title" style="background:${style.color}">
-                  <button class="section-chevron" data-toggle-section="${section.id}" title="Expandir o contraer">
+                  <button class="section-chevron" data-toggle-section="${section.id}">
                     ${isCollapsed ? "▸" : "▾"}
                   </button>
                   <span>${escapeHtml(section.name)}</span>
@@ -1282,10 +1326,10 @@
 
                         return `
                           <div class="data-row">
-                            <div class="cell left col-activity">
+                            <div class="cell left">
                               <div class="activity-wrap">
                                 <span class="chip ${style.chipClass}">${escapeHtml(item.subcategory || "Sin subcategoría")}</span>
-                                <textarea data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
+                                <textarea class="activity-input" data-title="${section.id}|${item.id}">${escapeHtml(item.title)}</textarea>
                               </div>
                             </div>
 
@@ -1320,45 +1364,121 @@
       }).join("");
     }
 
-    function renderDraftSections() {
-      document.getElementById("draftSection").innerHTML = sections.map(s => `
-        <option value="${s.id}" ${s.id === draft.sectionId ? "selected" : ""}>
-          ${escapeHtml(s.name)}
-        </option>
-      `).join("");
+    function render() {
+      sections = sanitizeData(sections);
+      renderChart();
+      renderTable();
+      renderDraftSections();
+      renderDraftMonths();
+      bindEvents();
     }
 
-    function renderDraftMonths() {
-      document.getElementById("draftMonths").innerHTML = Array.from({ length: 12 }, (_, i) => `
-        <input
-          class="month-input ${draft.months[i] ? "active" : ""}"
-          data-draft-month="${i}"
-          value="${draft.months[i] ? "●" : ""}"
-          placeholder="${i + 1}"
-          readonly
-        >
-      `).join("");
+    function updateItemLocal(sectionId, itemId, patch) {
+      sections = sections.map(section =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              items: section.items.map(item => {
+                if (item.id !== itemId) return item;
+
+                let next = { ...item, ...patch };
+
+                if (patch.period !== undefined) {
+                  next.period = normalizePeriod(patch.period);
+                  next.months = parsePeriodToMonths(next.period);
+                }
+
+                if (patch.months !== undefined) {
+                  next.months = normalizeMonths(patch.months);
+                  next.period = periodFromMonths(next.months);
+                }
+
+                return next;
+              })
+            }
+      );
+    }
+
+    function deleteItemLocal(sectionId, itemId) {
+      sections = sections.map(section =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              items: section.items.filter(item => item.id !== itemId)
+            }
+      );
+    }
+
+    function addItemLocal(newItem) {
+      sections = sections.map(section =>
+        section.id !== newItem.sectionId
+          ? section
+          : {
+              ...section,
+              items: [
+                ...section.items,
+                {
+                  id: uid(),
+                  subcategory: newItem.subcategory.trim(),
+                  title: newItem.title.trim(),
+                  period: newItem.period,
+                  months: normalizeMonths(newItem.months)
+                }
+              ]
+            }
+      );
+    }
+
+    async function pushRemote() {
+      try {
+        suppressRemoteRender = true;
+        setSyncState("saving", "Guardando…");
+
+        const clean = sanitizeData(sections);
+
+        await setDoc(sharedDocRef, {
+          sections: clean,
+          meta: {
+            lastEditedBy: CURRENT_USER,
+            lastEditedAt: serverTimestamp()
+          }
+        }, { merge: true });
+
+        setSyncState("online", "Sincronizado");
+      } catch (err) {
+        console.error(err);
+        setSyncState("error", "Error al sincronizar");
+      } finally {
+        setTimeout(() => {
+          suppressRemoteRender = false;
+        }, 250);
+      }
+    }
+
+    function schedulePush() {
+      setSyncState("saving", "Guardando…");
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(pushRemote, 350);
     }
 
     function bindEvents() {
-      document.querySelectorAll("textarea[data-title]").forEach(el => {
+      document.querySelectorAll("[data-title]").forEach(el => {
         el.oninput = () => {
           const [sectionId, itemId] = el.dataset.title.split("|");
-          updateItem(sectionId, itemId, { title: el.value }, false);
+          updateItemLocal(sectionId, itemId, { title: el.value });
           renderChart();
+          schedulePush();
         };
       });
 
       document.querySelectorAll("[data-period]").forEach(el => {
         el.oninput = () => {
           const [sectionId, itemId] = el.dataset.period.split("|");
-          const newPeriod = normalizePeriod(el.value);
-          const parsedMonths = parsePeriodToMonths(newPeriod);
-
-          updateItem(sectionId, itemId, {
-            period: newPeriod,
-            months: parsedMonths
-          });
+          updateItemLocal(sectionId, itemId, { period: el.value });
+          render();
+          schedulePush();
         };
       });
 
@@ -1368,36 +1488,29 @@
           const monthNumber = Number(month);
 
           const section = sections.find(s => s.id === sectionId);
-          const item = section.items.find(i => i.id === itemId);
+          const item = section?.items.find(i => i.id === itemId);
+          if (!item) return;
 
           const hasMonth = item.months.includes(monthNumber);
           const newMonths = hasMonth
             ? item.months.filter(m => m !== monthNumber)
             : [...item.months, monthNumber];
 
-          const normalized = normalizeMonths(newMonths);
-          const newPeriod = periodFromMonths(normalized);
-
-          updateItem(sectionId, itemId, {
-            months: normalized,
-            period: newPeriod
-          });
+          updateItemLocal(sectionId, itemId, { months: newMonths });
+          render();
+          schedulePush();
         };
       });
 
       document.querySelectorAll("[data-delete]").forEach(el => {
         el.onclick = () => {
           const [sectionId, itemId] = el.dataset.delete.split("|");
-          deleteItem(sectionId, itemId);
-        };
-      });
+          const ok = confirm("¿Eliminar esta actividad?");
+          if (!ok) return;
 
-      document.querySelectorAll("[data-draft-month]").forEach(el => {
-        el.onclick = () => {
-          const idx = Number(el.dataset.draftMonth);
-          draft.months[idx] = draft.months[idx] ? "" : "1";
-          renderDraftMonths();
-          bindEvents();
+          deleteItemLocal(sectionId, itemId);
+          render();
+          schedulePush();
         };
       });
 
@@ -1416,39 +1529,119 @@
           render();
         };
       });
+
+      document.querySelectorAll("[data-draft-month]").forEach(el => {
+        el.onclick = () => {
+          const idx = Number(el.dataset.draftMonth);
+          draft.months[idx] = draft.months[idx] ? "" : "1";
+          renderDraftMonths();
+          bindEvents();
+        };
+      });
     }
 
-    function render() {
-      sections = sanitizeData(sections);
-      renderChart();
-      renderTable();
-      renderDraftSections();
-      renderDraftMonths();
-      bindEvents();
+    async function resetRemoteData() {
+      const ok = confirm("Esto reemplazará el cronograma compartido para todos. ¿Continuar?");
+      if (!ok) return;
+
+      sections = deepCopy(INITIAL_DATA);
+      render();
+      await pushRemote();
     }
 
-    document.getElementById("searchInput").oninput = e => {
+    function exportExcelHtml() {
+      let html = '<table border="1"><tr><th>Sección</th><th>Subcategoría</th><th>Actividad</th><th>Periodo</th>';
+      for (let i = 1; i <= 12; i++) html += `<th>Mes ${i}</th>`;
+      html += "</tr>";
+
+      sections.forEach(section => {
+        section.items.forEach(item => {
+          html += `<tr>
+            <td>${escapeHtml(section.name)}</td>
+            <td>${escapeHtml(item.subcategory)}</td>
+            <td>${escapeHtml(item.title)}</td>
+            <td>${escapeHtml(item.period || "")}</td>`;
+          for (let i = 1; i <= 12; i++) {
+            html += `<td>${item.months.includes(i) ? 1 : ""}</td>`;
+          }
+          html += "</tr>";
+        });
+      });
+
+      html += "</table>";
+
+      const full = `<html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
+      const blob = new Blob([full], { type: "application/vnd.ms-excel" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "actividades_hitos.xls";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    async function ensureRemoteDocument() {
+      setSyncState("saving", "Conectando…");
+      const snap = await getDoc(sharedDocRef);
+
+      if (!snap.exists()) {
+        await setDoc(sharedDocRef, {
+          sections: deepCopy(INITIAL_DATA),
+          meta: {
+            lastEditedBy: CURRENT_USER,
+            lastEditedAt: serverTimestamp()
+          }
+        });
+      }
+    }
+
+    async function init() {
+      try {
+        await ensureRemoteDocument();
+
+        onSnapshot(sharedDocRef, (snap) => {
+          const data = snap.data() || {};
+
+          if (!suppressRemoteRender) {
+            sections = sanitizeData(data.sections || deepCopy(INITIAL_DATA));
+            render();
+          }
+
+          updateLastEditor(data.meta || {});
+          setSyncState("online", "Sincronizado");
+
+          if (!initialized) {
+            initialized = true;
+          }
+        }, (error) => {
+          console.error(error);
+          setSyncState("error", "Sin conexión");
+        });
+
+      } catch (err) {
+        console.error(err);
+        setSyncState("error", "Error inicial");
+      }
+    }
+
+    document.getElementById("searchInput").oninput = (e) => {
       query = e.target.value;
       renderTable();
       bindEvents();
     };
 
     document.getElementById("exportBtn").onclick = exportExcelHtml;
-    document.getElementById("saveBtn").onclick = saveChanges;
-    document.getElementById("resetBtn").onclick = resetData;
 
     document.getElementById("addBtn").onclick = () => {
       document.getElementById("modalBackdrop").classList.add("show");
     };
 
-    document.getElementById("closeModal").onclick = () => {
-      document.getElementById("modalBackdrop").classList.remove("show");
-    };
+    document.getElementById("resetBtn").onclick = resetRemoteData;
 
-    document.getElementById("modalBackdrop").onclick = e => {
-      if (e.target.id === "modalBackdrop") {
-        e.currentTarget.classList.remove("show");
-      }
+    document.getElementById("closeModal").onclick = closeModal;
+    document.getElementById("cancelDraft").onclick = closeModal;
+
+    document.getElementById("modalBackdrop").onclick = (e) => {
+      if (e.target.id === "modalBackdrop") closeModal();
     };
 
     document.getElementById("draftSection").onchange = e => {
@@ -1467,7 +1660,7 @@
       draft.period = e.target.value;
     };
 
-    document.getElementById("saveDraft").onclick = () => {
+    document.getElementById("saveDraft").onclick = async () => {
       if (!draft.subcategory.trim() || !draft.title.trim()) {
         alert("Completa subcategoría y actividad.");
         return;
@@ -1478,25 +1671,13 @@
         ? parsePeriodToMonths(normalizedPeriod)
         : monthsFromInputs(draft.months);
 
-      sections = sections.map(section =>
-        section.id !== draft.sectionId
-          ? section
-          : {
-              ...section,
-              items: [
-                ...section.items,
-                {
-                  id: uid(),
-                  subcategory: draft.subcategory.trim(),
-                  title: draft.title.trim(),
-                  period: normalizedPeriod || periodFromMonths(months),
-                  months: normalizeMonths(months)
-                }
-              ]
-            }
-      );
-
-      markDirty();
+      addItemLocal({
+        sectionId: draft.sectionId,
+        subcategory: draft.subcategory,
+        title: draft.title,
+        period: normalizedPeriod || periodFromMonths(months),
+        months
+      });
 
       draft = {
         sectionId: draft.sectionId,
@@ -1509,17 +1690,16 @@
       document.getElementById("draftSubcategory").value = "";
       document.getElementById("draftTitle").value = "";
       document.getElementById("draftPeriod").value = "";
-      document.getElementById("modalBackdrop").classList.remove("show");
+      closeModal();
       render();
+      await pushRemote();
     };
 
-    window.addEventListener("beforeunload", function (e) {
-      if (!hasUnsavedChanges) return;
-      e.preventDefault();
-      e.returnValue = "";
-    });
+    function closeModal() {
+      document.getElementById("modalBackdrop").classList.remove("show");
+    }
 
-    render();
+    init();
   </script>
 </body>
 </html>
